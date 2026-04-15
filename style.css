@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #1e1e2e; /* Fundo escuro agradável */
+    color: #cdd6f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #313244;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 300px;
+}
+
+.file-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.file-icon {
+    width: 64px;
+    height: 64px;
+    color: #89b4fa;
+}
+
+.filename {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #a6adc8;
+}
+
+.btn {
+    background-color: #89b4fa;
+    color: #11111b;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+}
+
+.btn:hover {
+    background-color: #b4befe;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Classe adicionada via JS durante o clique */
+.btn.baixando {
+    background-color: #a6e3a1; /* Fica verdinho */
+    color: #11111b;
+}
