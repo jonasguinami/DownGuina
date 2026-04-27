@@ -1,3 +1,4 @@
+/* --- Reset & Base --- */
 * {
     margin: 0;
     padding: 0;
@@ -5,73 +6,196 @@
 }
 
 body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: #1e1e2e; /* Fundo escuro agradável */
-    color: #cdd6f4;
+    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
+    background-color: #0f172a; 
+    color: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    line-height: 1.5;
+}
+
+/* --- Container Principal --- */
+.main-container {
+    width: 100%;
+    max-width: 800px; /* Centralizado e com respiro */
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+/* --- Header --- */
+.header {
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #2dd4bf 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    color: #94a3b8;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* --- Grid (para extensibilidade) --- */
+.downloads-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Um por linha em mobile */
+    gap: 2rem;
+}
+
+@media (min-width: 640px) {
+    .downloads-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+/* --- O Card de Download (Design Perfeito) --- */
+.download-card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px; /* Bem redondinho */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+}
+
+.download-card:hover {
+    transform: translateY(-4px);
+    border-color: #2dd4bf40; /* Brilho sutil no hover */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 1.25rem;
+}
+
+.package-icon {
+    width: 50px;
+    height: 50px;
+    background-color: #2dd4bf15; /* Fundo do ícone com transparência */
+    color: #2dd4bf;
+    border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    padding: 10px;
 }
 
-.container {
-    background-color: #313244;
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 300px;
+.card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f1f5f9;
 }
 
-.file-info {
+.file-count {
+    font-size: 0.875rem;
+    color: #2dd4bf;
+    font-weight: 500;
+}
+
+/* Card Body (Lista de Arquivos) */
+.card-body h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+}
+
+.file-list {
+    list-style: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 0.5rem;
 }
 
-.file-icon {
-    width: 64px;
-    height: 64px;
-    color: #89b4fa;
-}
-
-.filename {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #a6adc8;
-}
-
-.btn {
-    background-color: #89b4fa;
-    color: #11111b;
-    text-decoration: none;
-    padding: 0.75rem 1.5rem;
+.file-list li {
+    background-color: #0f172a80;
+    padding: 0.6rem 1rem;
     border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.file-list li:hover {
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+.file-list li .icon {
+    font-size: 1.1rem;
+}
+
+/* Card Footer (O Botão) */
+.card-footer {
+    margin-top: auto; /* Empurra o botão para o fundo do card se tiver alturas diferentes */
+    padding-top: 0.5rem;
+}
+
+.btn-download {
     width: 100%;
-    cursor: pointer;
+    background-color: #2dd4bf; /* Cor Sotaque */
+    color: #0f172a;
     border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.btn:hover {
-    background-color: #b4befe;
-    transform: translateY(-2px);
+.btn-download:hover {
+    background-color: #f1f5f9; /* Inverte cor no hover */
+    transform: scale(1.02);
 }
 
-.btn:active {
-    transform: translateY(0);
+.btn-download:active {
+    transform: scale(0.98);
 }
 
-/* Classe adicionada via JS durante o clique */
-.btn.baixando {
-    background-color: #a6e3a1; /* Fica verdinho */
-    color: #11111b;
+.dl-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Estados do botão via JS */
+.btn-download.is-loading {
+    background-color: #334155;
+    color: #94a3b8;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-download.is-success {
+    background-color: #10b981; /* Verde Sucesso */
+    color: white;
 }

@@ -3,23 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download</title>
+    <title>Central de Downloads | OXP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="file-info">
-            <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                <polyline points="13 2 13 9 20 9"></polyline>
-            </svg>
-            <p class="filename">DRAFT OXP</p>
-        </div>
 
-        <a href="./Sistema_Presente_Zerado.xlsx" download id="download-btn" class="btn">
-            Baixar Arquivo
-        </a>
-    </div>
+    <main class="main-container">
+        
+        <header class="header">
+            <h1>Central de Arquivos</h1>
+            <p>Selecione o arquivo ou pacote desejado abaixo para iniciar o download.</p>
+        </header>
+
+        <section class="downloads-grid">
+
+            <article class="download-card">
+                <div class="card-header">
+                    <div class="package-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Sistema Financeiro</h2>
+                        <p class="file-count">Arquivo Único</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <h3>Conteúdo:</h3>
+                    <ul class="file-list">
+                        <li><span class="icon">📊</span> Sistema_Presente_Zerado.xlsx</li>
+                    </ul>
+                </div>
+
+                <div class="card-footer">
+                    <a href="./Sistema_Presente_Zerado.xlsx" download class="btn-download" style="text-decoration: none;">
+                        <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Baixar Planilha</span>
+                    </a>
+                </div>
+            </article>
+
+            <article class="download-card">
+                <div class="card-header">
+                    <div class="package-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Pacote: DRAFT OXP</h2>
+                        <p class="file-count">5 arquivos inclusos</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <h3>Conteúdo do pacote:</h3>
+                    <ul class="file-list">
+                        <li><span class="icon">📄</span> index.html</li>
+                        <li><span class="icon">🖼️</span> fundo.jpg</li>
+                        <li><span class="icon">🖼️</span> icon.jpg</li>
+                        <li><span class="icon">🖼️</span> logo.png</li>
+                        <li><span class="icon">🖼️</span> simbol.png</li>
+                    </ul>
+                </div>
+
+                <div class="card-footer">
+                    <button 
+                        class="btn-download js-download-multiple" 
+                        data-package-name="DRAFT OXP"
+                        data-arquivos="index.html,fundo.jpg,icon.jpg,logo.png,simbol.png">
+                        <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Baixar Pacote Completo</span>
+                    </button>
+                </div>
+            </article>
+
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
