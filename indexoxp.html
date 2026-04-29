@@ -5,1415 +5,2093 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draft-OXP | Expeditors</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="simbol.png" type="image/png">
-    <link rel="icon" href="simbol.png" type="image/png">
-    
-    <link rel="apple-touch-icon" href="icon.jpg">
     
     <style>
-        /* ==========================================================================
-           VARIÁVEIS DE COR E ESTILO (DARK MODE + RED BRANDING)
-           ========================================================================== */
-        :root {
-            --bg-dark: #0a0a0c;
-            --surface: rgba(24, 24, 27, 0.85); /* Vidro escuro */
-            --surface-panel: rgba(39, 39, 42, 0.5); /* Painel interno */
-            --border: #3f3f46;
-            --border-light: #27272a;
-            --primary: #ef4444; /* Vermelho Expeditors */
-            --primary-hover: #dc2626;
-            --accent: #fca5a5;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --text-main: #f4f4f5;
-            --text-muted: #a1a1aa;
-            --input-bg: #18181b;
-            --radius: 16px; /* Bordas mais arredondadas */
-            --btn-radius: 12px;
-            --input-height: 48px; /* Inputs mais altos para clique fácil */
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+    /* ==========================================================================
+       VARIÁVEIS DE COR E ESTILO (DARK MODE + RED BRANDING)
+       ========================================================================== */
+    :root {
+        --bg-dark: #0a0a0c;
+        --surface: rgba(24, 24, 27, 0.85);
+        --surface-panel: rgba(39, 39, 42, 0.5);
+        --border: #3f3f46;
+        --border-light: #27272a;
+        --primary: #ef4444;
+        --primary-hover: #dc2626;
+        --accent: #fca5a5;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --text-main: #f4f4f5;
+        --text-muted: #a1a1aa;
+        --input-bg: #18181b;
+        --radius: 16px;
+        --btn-radius: 12px;
+        --input-height: 48px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
 
-        /* ==========================================================================
-           TEMA CLARO (LIGHT MODE OVERRIDES)
-           ========================================================================== */
-        [data-theme="light"] {
-            --bg-dark: #f4f7f6;
-            --surface: rgba(255, 255, 255, 0.95);
-            --surface-panel: #ffffff;
-            --border: #e2e8f0;
-            --border-light: #cbd5e1;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --input-bg: #ffffff;
-        }
+    /* ==========================================================================
+       TEMA CLARO (LIGHT MODE OVERRIDES)
+       ========================================================================== */
+    [data-theme="light"] {
+        --bg-dark: #f4f7f6;
+        --surface: rgba(255, 255, 255, 0.95);
+        --surface-panel: #ffffff;
+        --border: #e2e8f0;
+        --border-light: #cbd5e1;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --input-bg: #ffffff;
+    }
 
-        /* ==========================================================================
-           BASE & ESTRUTURA
-           ========================================================================== */
+    /* ==========================================================================
+       BASE & ESTRUTURA
+       ========================================================================== */
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        background-image: url('fundo.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 850px;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        background: var(--surface);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius);
+        padding: 50px;
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
+    }
+
+    /* ==========================================================================
+       TIPOGRAFIA, CABEÇALHOS & LOGO
+       ========================================================================== */
+    .header {
+        margin-bottom: 45px;
+        text-align: center;
+    }
+
+    .header-top {
+        display: flex;
+        flex-direction: row !important;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        position: relative;
+        width: 100%;
+    }
+
+    .brand-logo {
+        display: block;
+        margin: 0;
+        background-color: #ffffff !important;
+        padding: 12px 25px;
+        border-radius: 50px;
+        max-height: 50px;
+        width: auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        object-fit: contain;
+        transition: var(--transition);
+        flex-shrink: 0;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 3.2rem;
+        font-weight: 800;
+        color: var(--text-main);
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+    }
+
+    .header h1 span {
+        color: var(--primary);
+    }
+
+    .header p {
+        margin: 15px 0 0 0;
+        color: var(--text-muted);
+        font-size: 1.05rem;
+    }
+
+    .theme-toggle {
+        position: absolute;
+        top: 5px;
+        right: 0;
+        width: 45px;
+        height: 45px;
+        padding: 0;
+        border-radius: 50%;
+        background: var(--surface-panel);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+        background: var(--border-light);
+        transform: scale(1.05);
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: transparent;
+        border: none;
+        color: var(--text-main);
+        cursor: pointer;
+        padding: 5px;
+        position: absolute;
+        left: 0;
+        top: 10px;
+        transition: var(--transition);
+    }
+
+    .mobile-menu-btn:hover {
+        color: var(--primary);
+    }
+
+    /* ==========================================================================
+       NAVEGAÇÃO (ABAS)
+       ========================================================================== */
+    .subbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        border-bottom: 2px solid var(--border-light);
+        padding-bottom: 10px;
+        overflow-x: auto;
+    }
+
+    .tab {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: var(--btn-radius);
+        transition: var(--transition);
+        white-space: nowrap;
+    }
+
+    .tab.active {
+        background: var(--primary);
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    }
+
+    .tab:hover:not(.active) {
+        background: var(--surface-panel);
+        color: var(--text-main);
+    }
+
+    .page-view {
+        display: none;
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    .page-view.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ==========================================================================
+       GRIDS & LAYOUT
+       ========================================================================== */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .section-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 40px 0 25px;
+        border-bottom: 2px solid var(--border-light);
+        padding-bottom: 12px;
+    }
+
+    .section-title {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--primary);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    /* ==========================================================================
+       FORMULÁRIOS & INPUTS
+       ========================================================================== */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-main);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-group .hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    .required::after {
+        content: " *";
+        color: var(--primary);
+    }
+
+    .form-control {
+        width: 100%;
+        height: var(--input-height);
+        padding: 0 16px;
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--btn-radius);
+        font-family: inherit;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        transition: var(--transition);
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    textarea.form-control {
+        height: auto;
+        min-height: 90px;
+        padding: 14px 16px;
+        resize: none;
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a1a1aa' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 16px;
+        padding-right: 45px;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    }
+
+    /* ==========================================================================
+       CHECKBOXES CUSTOMIZADOS (DOCUMENTOS)
+       ========================================================================== */
+    .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        background: var(--input-bg);
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--btn-radius);
+        transition: var(--transition);
+        flex: 1 1 calc(33.333% - 12px);
+        min-width: 180px;
+        box-sizing: border-box;
+    }
+
+    .checkbox-label:hover {
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    [data-theme="light"] .checkbox-label:hover {
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Reset e estilo da caixa do checkbox */
+    .checkbox-label input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        cursor: pointer;
+        background-color: var(--surface-panel);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        position: relative;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    /* Cor de fundo e borda quando selecionado */
+    .checkbox-label input[type="checkbox"]:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    /* Desenho do ícone de 'V' (Check) via CSS puro */
+    .checkbox-label input[type="checkbox"]:checked::after {
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        top: 2px;
+    }
+
+    /* Efeito de foco */
+    .checkbox-label input[type="checkbox"]:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        outline: none;
+    }
+
+    /* ==========================================================================
+       BOTÕES E COMPONENTES ESPECIAIS
+       ========================================================================== */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        height: 50px;
+        padding: 0 28px;
+        border-radius: var(--btn-radius);
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+
+    .btn-ghost {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px dashed var(--border);
+        width: 100%;
+        margin-top: 25px;
+    }
+
+    .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: var(--text-muted);
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-secondary {
+        background: var(--surface-panel);
+        color: var(--text-main);
+        border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+        background: var(--border);
+    }
+
+    .actions-bar {
+        display: flex;
+        gap: 15px;
+        margin-top: 45px;
+        padding-top: 30px;
+        border-top: 1px solid var(--border-light);
+    }
+
+    .btn-danger-ghost {
+        background: transparent;
+        border: 1px dashed var(--danger);
+        color: var(--danger);
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .btn-danger-ghost:hover {
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    [data-theme="light"] .btn-danger-ghost:hover {
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    /* SEÇÕES COLAPSÁVEIS */
+    .section-wrapper {
+        background: var(--surface-panel);
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius);
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .section-header-click {
+        padding: 15px 20px;
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    [data-theme="light"] .section-header-click {
+        background: #f8fafc;
+    }
+
+    .section-title-click {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-num-badge {
+        background: var(--primary);
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+    .chevron-icon {
+        transition: transform 0.3s ease;
+        color: var(--text-muted);
+    }
+
+    .section-wrapper.collapsed .chevron-icon {
+        transform: rotate(-90deg);
+    }
+
+    .section-body {
+        padding: 20px;
+        display: block;
+    }
+
+    .section-wrapper.collapsed .section-body {
+        display: none;
+    }
+
+    /* MODO LCL / FCL */
+    .toggle-bar {
+        display: flex;
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--btn-radius);
+        overflow: hidden;
+        width: max-content;
+        margin-bottom: 20px;
+    }
+
+    .toggle-opt {
+        padding: 10px 30px;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: var(--transition);
+    }
+
+    .toggle-opt.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    .toggle-opt:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="light"] .toggle-opt:hover:not(.active) {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .totals-box {
+        display: flex;
+        gap: 30px;
+        padding: 15px 20px;
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid var(--border-light);
+        border-radius: 0 0 var(--radius) var(--radius);
+        margin: 20px -20px -20px -20px;
+    }
+
+    [data-theme="light"] .totals-box {
+        background: #f8fafc;
+    }
+
+    .total-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .total-lbl {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .total-val {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .special-block {
+        border: 1px dashed var(--primary);
+        padding: 15px;
+        border-radius: var(--radius);
+        margin-top: 15px;
+        background: rgba(239, 68, 68, 0.05);
+        display: none;
+    }
+
+    /* CONTAINERS E DRAG & DROP */
+    .container-form-panel {
+        background: var(--surface-panel);
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border-light);
+    }
+
+    #containersList {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .container-badge {
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--primary);
+        border-radius: var(--btn-radius);
+        display: flex;
+        align-items: center;
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+    }
+
+    .container-badge.dragging {
+        opacity: 0.4;
+        border: 2px dashed var(--primary);
+    }
+
+    .drag-handle {
+        cursor: grab;
+        color: var(--text-muted);
+        margin-right: 18px;
+        display: flex;
+        align-items: center;
+    }
+
+    .drag-handle:active {
+        cursor: grabbing;
+        color: var(--primary);
+    }
+
+    .container-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .container-info strong {
+        color: var(--text-main);
+        font-size: 1rem;
+    }
+
+    .container-actions {
+        display: flex;
+        gap: 15px;
+        margin-left: 15px;
+    }
+
+    .action-icon {
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .action-icon:hover {
+        color: var(--text-main);
+    }
+
+    .action-icon.delete:hover {
+        color: var(--danger);
+    }
+
+    /* MODAIS */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .modal.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-content {
+        position: relative;
+        background: var(--bg-dark);
+        width: 100%;
+        max-width: 750px;
+        max-height: 90vh;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 40px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
+        transform: translateY(20px);
+        transition: transform 0.3s;
+        box-sizing: border-box;
+    }
+
+    .modal.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 25px;
+        right: 30px;
+        font-size: 1.8rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+        line-height: 1;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .close-modal:hover {
+        color: var(--danger);
+        transform: scale(1.1);
+    }
+
+    .review-card {
+        background: var(--surface-panel);
+        padding: 24px;
+        border-radius: var(--btn-radius);
+        border: 1px solid var(--border-light);
+        border-left: 4px solid var(--primary);
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        color: var(--text-main);
+    }
+
+    .review-card-title {
+        font-weight: 700;
+        color: var(--text-main);
+        font-size: 1.05rem;
+        margin-bottom: 18px;
+        border-bottom: 1px solid var(--border-light);
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .review-data-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .review-label {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .review-value {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    /* ==========================================================================
+       MOBILE
+       ========================================================================== */
+    @media (max-width: 768px) {
         body {
-            margin: 0; 
-            padding: 20px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex; 
-            align-items: flex-start; 
-            justify-content: center;
-            background-image: url('fundo.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed;
+            padding: 10px;
         }
 
         .wrapper {
-            width: 100%; 
-            max-width: 850px; 
-            margin-top: 20px; 
-            margin-bottom: 40px;
-            background: var(--surface); 
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: var(--radius); 
-            padding: 50px;
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-            box-sizing: border-box;
+            padding: 30px 20px;
+            margin-top: 10px;
+            border-radius: 20px;
         }
 
-        /* ==========================================================================
-           TIPOGRAFIA, CABEÇALHOS & LOGO
-           ========================================================================== */
-        .header { 
-            margin-bottom: 45px; 
-            text-align: center; 
+        .header {
+            padding-top: 0;
+            margin-bottom: 35px;
         }
-        
-        /* DESKTOP: Logo e Titulo rigidamente LADO A LADO */
+
         .header-top {
-            display: flex;
-            flex-direction: row !important; /* Força ficar na mesma linha */
-            align-items: center;
+            flex-direction: row !important;
             justify-content: center;
-            gap: 20px;
-            position: relative; 
-            width: 100%; 
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-menu-btn {
+            display: block;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 5px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
         }
 
         .brand-logo {
-            display: block;
+            max-height: 26px;
+            padding: 6px 14px;
             margin: 0;
-            background-color: #ffffff !important;
-            padding: 12px 25px;
-            border-radius: 50px;
-            max-height: 50px; 
-            width: auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            object-fit: contain;
-            transition: var(--transition);
-            flex-shrink: 0; /* Impede a logo de ser esmagada */
-        }
-        
-        .header h1 { 
-            margin: 0; 
-            font-size: 3.2rem; 
-            font-weight: 800; 
-            color: var(--text-main); 
-            letter-spacing: -0.04em; 
-            white-space: nowrap; /* Impede o título de quebrar linha */
-        }
-        
-        .header h1 span {
-            color: var(--primary); 
         }
 
-        .header p { 
-            margin: 15px 0 0 0; 
-            color: var(--text-muted); 
-            font-size: 1.05rem; 
+        .header h1 {
+            font-size: 1.7rem;
+            flex: none;
+            text-align: center;
         }
 
-        /* Posicionamento do botão de tema */
-        .theme-toggle {
-            position: absolute;
-            top: 5px; 
-            right: 0;
-            width: 45px;
-            height: 45px;
-            padding: 0;
-            border-radius: 50%;
-            background: var(--surface-panel);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .theme-toggle:hover { 
-            background: var(--border-light); 
-            transform: scale(1.05); 
-        }
-
-        /* ==========================================================================
-           GRIDS & LAYOUT
-           ========================================================================== */
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-
-        .section-header {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            margin: 40px 0 25px; 
-            border-bottom: 2px solid var(--border-light); 
-            padding-bottom: 12px;
-        }
-
-        .section-title {
-            font-size: 0.9rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.08em; 
-            color: var(--primary);
-            font-weight: 700; 
-            margin: 0; 
-        }
-
-        /* ==========================================================================
-           FORMULÁRIOS & INPUTS
-           ========================================================================== */
-        .form-group { 
-            display: flex; 
-            flex-direction: column; 
-        }
-        
-        .form-group label { 
-            font-size: 0.85rem; 
-            font-weight: 600; 
-            margin-bottom: 8px; 
-            color: var(--text-main); 
-            display: flex; 
-            justify-content: space-between;
-        }
-        
-        .form-group .hint { 
-            font-size: 0.75rem; 
-            color: var(--text-muted); 
-            font-weight: 400; 
-        }
-        
-        .required::after { 
-            content: " *"; 
-            color: var(--primary); 
-        }
-
-        .form-control {
-            width: 100%; 
-            height: var(--input-height); 
-            padding: 0 16px; 
-            background: var(--input-bg); 
-            border: 1px solid var(--border); 
-            border-radius: var(--btn-radius); 
-            font-family: inherit; 
-            font-size: 0.95rem; 
-            color: var(--text-main); 
-            transition: var(--transition); 
-            box-sizing: border-box; 
-            outline: none;
-        }
-        
-        textarea.form-control { 
-            height: auto; 
-            min-height: 90px; 
-            padding: 14px 16px; 
-            resize: none; 
-        }
-        
-        select.form-control { 
-            appearance: none; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a1a1aa' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
-            background-repeat: no-repeat; 
-            background-position: right 16px center; 
-            background-size: 16px; 
-            padding-right: 45px; 
-        }
-        
-        .form-control:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); 
-        }
-
-        /* ==========================================================================
-           BOTÕES
-           ========================================================================== */
-        .btn {
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            height: 50px;
-            padding: 0 28px; 
-            border-radius: var(--btn-radius); 
-            font-weight: 700; 
+        .header p {
+            text-align: left;
+            margin-top: 15px;
             font-size: 0.95rem;
-            cursor: pointer; 
-            border: none; 
-            transition: var(--transition); 
-            font-family: inherit; 
-            box-sizing: border-box;
         }
 
-        .btn-ghost { 
-            background: transparent; 
-            color: var(--text-main); 
-            border: 1px dashed var(--border); 
-            width: 100%; 
-            margin-top: 25px; 
-        }
-
-        .btn-ghost:hover { 
-            background: rgba(255, 255, 255, 0.05); 
-            border-color: var(--text-muted); 
-        }
-        
-        .btn-primary { 
-            background: var(--primary); 
-            color: white; 
-        }
-
-        .btn-primary:hover { 
-            background: var(--primary-hover); 
-            transform: translateY(-2px); 
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3); 
-        }
-        
-        .btn-secondary { 
-            background: var(--surface-panel); 
-            color: var(--text-main); 
-            border: 1px solid var(--border); 
-        }
-
-        .btn-secondary:hover { 
-            background: var(--border); 
-        }
-
-        .actions-bar { 
-            display: flex; 
-            gap: 15px; 
-            margin-top: 45px; 
-            padding-top: 30px; 
-            border-top: 1px solid var(--border-light); 
-        }
-
-        /* ==========================================================================
-           LISTA DE CONTAINERS E DRAG & DROP
-           ========================================================================== */
-        .container-form-panel { 
-            background: var(--surface-panel); 
-            padding: 30px; 
-            border-radius: var(--radius); 
-            border: 1px solid var(--border-light); 
-        }
-
-        #containersList { 
-            margin-top: 25px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-        }
-        
-        .container-badge { 
-            background: var(--input-bg); 
-            border: 1px solid var(--border); 
-            border-left: 4px solid var(--primary);
-            border-radius: var(--btn-radius); 
-            display: flex; 
-            align-items: center; 
-            padding: 16px 20px;
-            font-size: 0.9rem; 
-            font-weight: 500; 
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-        }
-
-        .container-badge.dragging { 
-            opacity: 0.4; 
-            border: 2px dashed var(--primary); 
-        }
-        
-        .drag-handle { 
-            cursor: grab; 
-            color: var(--text-muted); 
-            margin-right: 18px; 
-            display: flex; 
-            align-items: center; 
-        }
-
-        .drag-handle:active { 
-            cursor: grabbing; 
-            color: var(--primary); 
-        }
-        
-        .container-info { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 4px; 
-        }
-
-        .container-info strong { 
-            color: var(--text-main); 
-            font-size: 1rem; 
-        }
-        
-        .container-actions { 
-            display: flex; 
-            gap: 15px; 
-            margin-left: 15px; 
-        }
-
-        .action-icon { 
-            cursor: pointer; 
-            color: var(--text-muted); 
-            transition: color 0.2s; 
-            display: flex; 
-            align-items: center; 
-            background: transparent;
-            border: none;
-            padding: 0;
-        }
-
-        .action-icon:hover { color: var(--text-main); }
-        .action-icon.delete:hover { color: var(--danger); }
-
-        /* ==========================================================================
-           MODAIS (REVISÃO E EDIÇÃO)
-           ========================================================================== */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.75); 
-            backdrop-filter: blur(8px); 
-            z-index: 1000; 
-            align-items: center; 
-            justify-content: center; 
-            opacity: 0; 
-            transition: opacity 0.3s; 
-            padding: 20px; 
-            box-sizing: border-box; 
-        }
-
-        .modal.show { 
-            display: flex; 
-            opacity: 1; 
-        }
-        
-        .modal-content { 
-            position: relative;
-            background: var(--bg-dark); 
-            width: 100%; 
-            max-width: 750px; 
-            max-height: 90vh; 
-            border-radius: var(--radius); 
-            border: 1px solid var(--border);
-            padding: 40px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5); 
-            overflow-y: auto; 
-            transform: translateY(20px); 
-            transition: transform 0.3s; 
-            box-sizing: border-box; 
-        }
-
-        .modal.show .modal-content { 
-            transform: translateY(0); 
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 25px;
-            right: 30px;
-            font-size: 1.8rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
-            line-height: 1;
-            background: transparent;
-            border: none;
-            padding: 0;
-        }
-
-        .close-modal:hover {
-            color: var(--danger);
-            transform: scale(1.1);
-        }
-
-        .review-card {
+        .subbar {
+            display: none;
+            flex-direction: column;
             background: var(--surface-panel);
-            padding: 24px;
-            border-radius: var(--btn-radius);
-            border: 1px solid var(--border-light);
-            border-left: 4px solid var(--primary);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 10px;
+            margin-bottom: 25px;
+            gap: 5px;
         }
 
-        .review-card-title {
-            font-weight: 700;
-            color: var(--text-main);
-            font-size: 1.05rem;
-            margin-bottom: 18px;
-            border-bottom: 1px solid var(--border-light);
-            padding-bottom: 10px;
+        .subbar.show-mobile {
             display: flex;
-            justify-content: space-between;
+            animation: fadeIn 0.3s ease;
         }
 
-        .review-data-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .tab {
+            text-align: center;
+            padding: 12px 20px;
+        }
+
+        .grid-2,
+        .grid-3,
+        .grid-4 {
+            grid-template-columns: 1fr;
             gap: 16px;
         }
 
-        .review-label {
-            color: var(--text-muted);
+        .section-header {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 10px;
+            flex-wrap: nowrap !important;
+        }
+
+        .section-title {
+            white-space: nowrap;
             font-size: 0.85rem;
-            display: block;
-            margin-bottom: 4px;
+        }
+
+        .checkbox-label {
+            flex: 1 1 100%;
+            min-width: 100%;
+        }
+
+        .container-form-panel {
+            padding: 20px;
+        }
+
+        .container-badge {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .drag-handle {
+            position: absolute;
+            top: 20px;
+            right: 15px;
+            margin: 0;
+        }
+
+        .container-info {
+            width: 100%;
+            padding-right: 30px;
+            box-sizing: border-box;
+        }
+
+        .container-actions {
+            margin-left: 0;
+            width: 100%;
+            justify-content: flex-end;
+            border-top: 1px solid var(--border-light);
+            padding-top: 15px;
+        }
+
+        #draftForm > .actions-bar {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        #draftForm > .actions-bar label[for="importFile"],
+        #draftForm > .actions-bar button.btn-secondary {
+            flex: 1 1 40%;
+            justify-content: center;
+        }
+
+        #draftForm > .actions-bar .btn-primary {
+            flex: 1 1 100%;
+        }
+
+        .modal-content {
+            padding: 25px 20px;
+        }
+
+        .review-data-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .review-label {
+            font-size: 0.75rem;
         }
 
         .review-value {
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            word-break: break-word;
         }
 
-        /* ==========================================================================
-           OTIMIZAÇÃO MOBILE (PERFEITO PARA CELULAR)
-           ========================================================================== */
-        @media (max-width: 768px) {
-            body { 
-                padding: 10px; 
-            }
-            
-            .wrapper { 
-                padding: 30px 20px; 
-                margin-top: 10px; 
-                border-radius: 20px; 
-            }
-            
-            .header { 
-                padding-top: 0; 
-                margin-bottom: 35px; 
-            }
-            
-            .header-top {
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                align-items: center; 
-                gap: 12px;
-            }
-            
-            .brand-logo { 
-                max-height: 26px; 
-                padding: 6px 14px; 
-                margin: 0; 
-            }
-            
-            .header h1 { 
-                font-size: 1.7rem; 
-                flex: 1; 
-                text-align: left; 
-            }
-            
-            .theme-toggle { 
-                position: relative; 
-                top: 0; 
-                right: 0; 
-                width: 40px; 
-                height: 40px; 
-                flex-shrink: 0; 
-            }
-            
-            .header p { 
-                text-align: left; 
-                margin-top: 15px; 
-                font-size: 0.95rem; 
-            }
-            
-            .grid-2, .grid-3, .grid-4 { 
-                grid-template-columns: 1fr; 
-                gap: 16px; 
-            }
-            
-            /* CRAVADO: Botão de reset na mesma linha, proibido de cair! */
-            .section-header { 
-                display: flex !important;
-                flex-direction: row !important; 
-                align-items: center !important; 
-                justify-content: space-between !important; 
-                gap: 10px; 
-                flex-wrap: nowrap !important; /* Impede a quebra de linha */
-            }
-            
-            /* Impede o título de esmagar o botão no mobile */
-            .section-title {
-                white-space: nowrap;
-                font-size: 0.85rem;
-            }
-            
-            .container-form-panel { 
-                padding: 20px; 
-            }
-            
-            .container-badge { 
-                flex-direction: column; 
-                align-items: flex-start; 
-                padding: 20px; 
-                gap: 15px; 
-            }
-            
-            .drag-handle { 
-                position: absolute; 
-                top: 20px; 
-                right: 15px; 
-                margin: 0; 
-            }
-            
-            .container-info { 
-                width: 100%; 
-                padding-right: 30px; 
-                box-sizing: border-box; 
-            }
-            
-            .container-actions { 
-                margin-left: 0; 
-                width: 100%; 
-                justify-content: flex-end; 
-                border-top: 1px solid var(--border-light); 
-                padding-top: 15px; 
-            }
-            
-            #draftForm > .actions-bar { 
-                flex-wrap: wrap; 
-                gap: 12px; 
-            }
-            
-            #draftForm > .actions-bar label[for="importFile"], 
-            #draftForm > .actions-bar button.btn-secondary { 
-                flex: 1 1 40%; 
-                justify-content: center; 
-            }
-            
-            #draftForm > .actions-bar .btn-primary { 
-                flex: 1 1 100%; 
-            }
-            
-            .modal-content { 
-                padding: 25px 20px; 
-            }
-            
-            .review-data-grid { 
-                grid-template-columns: 1fr 1fr; 
-                gap: 12px; 
-            }
-            
-            .review-label { 
-                font-size: 0.75rem; 
-            }
-            
-            .review-value { 
-                font-size: 0.85rem; 
-                word-break: break-word; 
-            }
-            
-            .modal-content .actions-bar { 
-                flex-wrap: nowrap; 
-                flex-direction: row; 
-                gap: 10px; 
-            }
-            
-            .modal-content .actions-bar button { 
-                flex: 1; 
-                justify-content: center; 
-                padding: 0 10px; 
-                font-size: 0.9rem; 
-                margin: 0; 
-            }
-            
-            .close-modal { 
-                top: 10px; 
-                right: 10px; 
-                padding: 15px; 
-                z-index: 9999; 
-            }
+        .modal-content .actions-bar {
+            flex-wrap: nowrap;
+            flex-direction: row;
+            gap: 10px;
         }
-    </style>
+
+        .modal-content .actions-bar button {
+            flex: 1;
+            justify-content: center;
+            padding: 0 10px;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .close-modal {
+            top: 10px;
+            right: 10px;
+            padding: 15px;
+            z-index: 9999;
+        }
+    }
+</style>
 
 </head>
-<body>
 
 <body>
 
-<div class="wrapper">
+    <div class="wrapper">
 
-    <div class="header">
-        <div class="header-top">
-            <img src="logo.png" class="brand-logo" alt="Expeditors Logo">
-            <h1>Draft <span>OXP</span></h1>
-            
-            <button type="button" id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Alternar Tema">
-                <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-            </button>
+        <div class="header">
+            <div class="header-top">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" title="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <img src="logo.png" class="brand-logo" alt="Expeditors Logo" onerror="this.style.display='none'">
+                <h1>Draft <span>OXP</span></h1>
+                <button type="button" id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Alternar Tema">
+                    <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+            <p>Preencha a matriz do BL e adicione os containers operacionais.</p>
         </div>
-        <p>Preencha a matriz do BL e adicione os containers operacionais.</p>
+
+        <div class="subbar">
+            <div class="tab active" onclick="showPage('page-form', this)">✦ Novo Draft</div>
+            <div class="tab" onclick="showPage('page-drafts', this)">Meus Rascunhos</div>
+            <div class="tab" onclick="showPage('page-templates', this)">Templates</div>
+            <div class="tab" onclick="showPage('page-history', this)">Histórico</div>
+            <div class="tab" onclick="showPage('page-help', this)">Ajuda & Contato</div>
+        </div>
+
+        <div id="page-form" class="page-view active">
+            <form id="draftForm">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <p style="margin:0; color: var(--text-muted);">Preencha os dados abaixo. Seções podem ser expandidas/recolhidas.</p>
+                    <button type="button" onclick="resetFormulario()" class="btn-danger-ghost" style="width: auto; margin-top: 0; height: auto;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Resetar
+                    </button>
+                </div>
+
+                <div class="section-wrapper" id="sec1">
+                    <div class="section-header-click" onclick="toggleSection('sec1')">
+                        <div class="section-title-click"><div class="section-num-badge">1</div>Routing & Vessel</div>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="section-body">
+                        <div class="grid-3" style="margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label class="required">BL Issuance</label>
+                                <select id="g_bl" class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Sea Waybill / Express Release">Sea Waybill / Express Release</option>
+                                    <option value="Originais na Origem">Originais na Origem</option>
+                                    <option value="Originais no Destino">Originais no Destino</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="required">Freight Terms</label>
+                                <select id="g_freight" class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Prepaid">Prepaid</option>
+                                    <option value="Collect">Collect</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Service / Trade Lane</label>
+                                <input type="text" id="g_service" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="grid-3" style="margin-bottom: 20px;">
+                            <div class="form-group"><label>Place of Receipt</label><input type="text" id="g_receipt" class="form-control"></div>
+                            <div class="form-group"><label class="required">Port of Loading (POL)</label><input type="text" id="g_pol" class="form-control" required></div>
+                            <div class="form-group"><label>Transshipment Port</label><input type="text" id="g_transship" class="form-control"></div>
+                        </div>
+
+                        <div class="grid-3" style="margin-bottom: 20px;">
+                            <div class="form-group"><label class="required">Port of Discharge (POD)</label><input type="text" id="g_pod" class="form-control" required></div>
+                            <div class="form-group"><label>Place of Delivery</label><input type="text" id="g_delivery" class="form-control"></div>
+                            <div class="form-group"><label class="required">Vessel</label><input type="text" id="g_vessel" class="form-control" required></div>
+                        </div>
+
+                        <div class="grid-4">
+                            <div class="form-group"><label class="required">Voyage No.</label><input type="text" id="g_voyage" class="form-control" required></div>
+                            <div class="form-group"><label>ETD</label><input type="date" id="g_etd" class="form-control"></div>
+                            <div class="form-group"><label>ETA</label><input type="date" id="g_eta" class="form-control"></div>
+                            <div class="form-group"><label>BL Instruction Cutoff</label><input type="date" id="g_cutoff" class="form-control"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-wrapper" id="sec2">
+                    <div class="section-header-click" onclick="toggleSection('sec2')">
+                        <div class="section-title-click"><div class="section-num-badge">2</div>Parties (Partes Envolvidas)</div>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="section-body">
+                        <div class="grid-3">
+                            <div class="form-group"><label class="required">Shipper</label><textarea id="g_shipper" class="form-control" required></textarea></div>
+                            <div class="form-group"><label class="required">Consignee</label><textarea id="g_consignee" class="form-control" required></textarea></div>
+                            <div class="form-group"><label class="required">Notify</label><textarea id="g_notify" class="form-control" required></textarea></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-wrapper" id="sec3">
+                    <div class="section-header-click" onclick="toggleSection('sec3')">
+                        <div class="section-title-click"><div class="section-num-badge">3</div>Descrição & Compliance</div>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="section-body">
+                        <div class="grid-2" style="margin-bottom: 20px;">
+                            <div class="form-group"><label class="required">Description of Goods</label><textarea id="g_desc" class="form-control" required></textarea></div>
+                            <div class="form-group"><label>Marks and Numbers</label><textarea id="g_marks" class="form-control"></textarea></div>
+                        </div>
+                        
+                        <div class="grid-3" style="margin-bottom: 20px;">
+                            <div class="form-group"><label class="required">NCM <span class="hint">Apenas números</span></label><input type="number" id="g_ncm" class="form-control" required></div>
+                            <div class="form-group"><label>RUC</label><input type="text" id="g_ruc" class="form-control"></div>
+                            <div class="form-group">
+                                <label class="required">Wood Declaration</label>
+                                <select id="g_wood" class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Treated and Certified">Treated and Certified</option>
+                                    <option value="Processed Wood">Processed Wood</option>
+                                    <option value="Not Applicable">Not Applicable</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 15px; border: 1px dashed var(--border-light); border-radius: var(--radius);">
+                            <div class="form-group">
+                                <label class="required" style="color: var(--danger);">Dangerous Goods (Carga Perigosa)</label>
+                                <select id="g_imo" class="form-control" required onchange="toggleDGBlock()">
+                                    <option value="Não">Não (No)</option>
+                                    <option value="Sim">Sim (Yes)</option>
+                                </select>
+                            </div>
+                            <div id="dg_block" class="special-block">
+                                <p style="margin-top:0; color:var(--danger); font-size: 0.85rem; font-weight:600;">⚠️ Informações IMO Obrigatórias:</p>
+                                <div class="grid-3">
+                                    <div class="form-group"><label>UN Number</label><input type="text" id="dg_un" class="form-control" placeholder="Ex: 1263"></div>
+                                    <div class="form-group"><label>IMO Class</label><input type="text" id="dg_class" class="form-control" placeholder="Ex: 3"></div>
+                                    <div class="form-group"><label>Packing Group</label><input type="text" id="dg_pg" class="form-control" placeholder="Ex: II"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label>Comments / Instruções Especiais no BL</label>
+                            <textarea id="g_comments" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-wrapper" id="sec4">
+                    <div class="section-header-click" onclick="toggleSection('sec4')">
+                        <div class="section-title-click"><div class="section-num-badge">4</div>Documentos e Certificações</div>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="section-body">
+                        <div class="grid-4" style="margin-bottom: 20px;">
+                            <div class="form-group"><label class="required">Invoice Number</label><input type="text" id="g_inv_num" class="form-control" required></div>
+                            <div class="form-group"><label>Invoice Date</label><input type="date" id="g_inv_date" class="form-control"></div>
+                            <div class="form-group"><label>Packing List No.</label><input type="text" id="g_pack_list" class="form-control"></div>
+                            <div class="form-group"><label>RE / DU-E (Brazil)</label><input type="text" id="g_due" class="form-control"></div>
+                        </div>
+                        
+                        <div class="grid-3" style="margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label>Certificate of Origin</label>
+                                <select id="g_cert_origin" class="form-control">
+                                    <option value="Not required">Not required</option>
+                                    <option value="Form A (GSP)">Form A (GSP)</option>
+                                    <option value="MERCOSUL Certificate">MERCOSUL Certificate</option>
+                                    <option value="EUR.1">EUR.1</option>
+                                    <option value="Certificate of Origin (CO)">Certificate of Origin (CO)</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>CO Number</label><input type="text" id="g_co_num" class="form-control"></div>
+                            <div class="form-group"><label>Letter of Credit (LC)</label><input type="text" id="g_lc" class="form-control"></div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>Issuing Bank (LC)</label>
+                            <input type="text" id="g_lc_bank" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Documents to Send to Destination</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label"><input type="checkbox" name="docs_dest" value="Original BL"> Original BL</label>
+                                <label class="checkbox-label"><input type="checkbox" name="docs_dest" value="Original Invoice"> Original Invoice</label>
+                                <label class="checkbox-label"><input type="checkbox" name="docs_dest" value="Packing List"> Packing List</label>
+                                <label class="checkbox-label"><input type="checkbox" name="docs_dest" value="Certificate of Origin"> Certificate of Origin</label>
+                                <label class="checkbox-label"><input type="checkbox" name="docs_dest" value="Phytosanitary Certificate"> Phytosanitary Certificate</label>
+                                <label class="checkbox-label"><input type="checkbox" name="docs_dest" value="Analysis Report"> Analysis Report</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-wrapper" id="sec5">
+                    <div class="section-header-click" onclick="toggleSection('sec5')">
+                        <div class="section-title-click"><div class="section-num-badge">5</div>Carga: FCL / LCL</div>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="section-body">
+                        <div class="toggle-bar">
+                            <div class="toggle-opt active" id="btn_fcl" onclick="setMode('FCL')">FCL (Containers)</div>
+                            <div class="toggle-opt" id="btn_lcl" onclick="setMode('LCL')">LCL (Carga Solta)</div>
+                        </div>
+
+                        <div id="block_fcl">
+                            <div class="container-form-panel">
+                                <p style="margin-top:0; font-size: 0.9rem; color: var(--text-muted);">Adicione os containers da remessa abaixo.</p>
+                                <div class="grid-2">
+                                    <div class="form-group"><label class="required">Container Number <span class="hint">Ex: EXPD1234567</span></label><input type="text" id="c_number" class="form-control" pattern="[A-Za-z0-9]+" style="text-transform: uppercase;"></div>
+                                    <div class="form-group"><label class="required">Lacre (Seal)</label><input type="text" id="c_lacre" class="form-control"></div>
+                                </div>
+                                <div class="grid-3" style="margin-top: 20px;">
+                                    <div class="form-group">
+                                        <label class="required">Type</label>
+                                        <select id="c_type" class="form-control">
+                                            <option value="20 Standard Dry">20 Standard Dry</option>
+                                            <option value="40 High Cube">40 High Cube</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required">Package</label>
+                                        <select id="c_pkgType" class="form-control">
+                                            <option value="Pallet">Pallet</option>
+                                            <option value="Box">Box</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label class="required">Qty</label><input type="number" id="c_qty" class="form-control"></div>
+                                </div>
+                                <div class="grid-4" style="margin-top: 20px;">
+                                    <div class="form-group"><label class="required">Tare (KG)</label><input type="number" id="c_tare" class="form-control"></div>
+                                    <div class="form-group"><label class="required">Gross (KG)</label><input type="number" id="c_gross" class="form-control"></div>
+                                    <div class="form-group"><label>Net (KG)</label><input type="number" id="c_net" class="form-control"></div>
+                                    <div class="form-group"><label>CBM (M³)</label><input type="number" step="0.001" id="c_cbm" class="form-control"></div>
+                                </div>
+                                <button type="button" id="btnAddContainer" class="btn btn-ghost" onclick="adicionarContainer()">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Adicionar Container
+                                </button>
+                            </div>
+                            <div id="containersList"></div>
+                            <div class="totals-box">
+                                <div class="total-item"><span class="total-lbl">Containers</span><span class="total-val" id="fcl_tot_cnt">0</span></div>
+                                <div class="total-item"><span class="total-lbl">Packages</span><span class="total-val" id="fcl_tot_pkg">0</span></div>
+                                <div class="total-item"><span class="total-lbl">Gross Weight</span><span class="total-val" id="fcl_tot_gw">0.00 kg</span></div>
+                                <div class="total-item"><span class="total-lbl">Volume</span><span class="total-val" id="fcl_tot_cbm">0.00 m³</span></div>
+                            </div>
+                        </div>
+
+                        <div id="block_lcl" style="display: none;">
+                            <div class="container-form-panel">
+                                <p style="margin-top:0; font-size: 0.9rem; color: var(--warning);">Modo LCL: Declare apenas os totais da carga solta.</p>
+                                <div class="grid-3">
+                                    <div class="form-group"><label class="required">Quantidade (Pkgs)</label><input type="number" id="lcl_qty" class="form-control" oninput="calcLCL()"></div>
+                                    <div class="form-group">
+                                        <label class="required">Tipo de Embalagem</label>
+                                        <select id="lcl_pkg" class="form-control" onchange="calcLCL()">
+                                            <option value="Pallets">Pallets</option>
+                                            <option value="Cartons">Cartons</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label class="required">Volume (CBM)</label><input type="number" step="0.001" id="lcl_cbm" class="form-control" oninput="calcLCL()"></div>
+                                </div>
+                                <div class="grid-2" style="margin-top: 20px;">
+                                    <div class="form-group"><label class="required">Gross Weight (KG)</label><input type="number" step="0.001" id="lcl_gross" class="form-control" oninput="calcLCL()"></div>
+                                    <div class="form-group"><label>Net Weight (KG)</label><input type="number" step="0.001" id="lcl_net" class="form-control" oninput="calcLCL()"></div>
+                                </div>
+                            </div>
+                            <div class="totals-box" style="margin-top: 0; border-top: none; border-radius: var(--radius);">
+                                 <div class="total-item">
+                                    <span class="total-lbl">Chargeable Weight Estimado</span>
+                                    <span class="total-val" id="lcl_chg_wt" style="color: var(--warning);">0.00 kg <span style="font-size:0.8rem; color:var(--text-muted);">(0.000 RT)</span></span>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-wrapper" id="sec6">
+                    <div class="section-header-click" onclick="toggleSection('sec6')">
+                        <div class="section-title-click"><div class="section-num-badge">6</div>Special Instructions & Contact</div>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>Special Instructions to Carrier</label>
+                            <textarea id="g_spec_instr" class="form-control" placeholder="Instruções diretas para a transportadora ou operação..."></textarea>
+                        </div>
+                        
+                        <div class="grid-3" style="margin-bottom: 20px;">
+                            <div class="form-group"><label class="required">Contact Name</label><input type="text" id="g_contact_name" class="form-control" required></div>
+                            <div class="form-group"><label class="required">Email</label><input type="email" id="g_contact_email" class="form-control" required></div>
+                            <div class="form-group"><label>Phone / WhatsApp</label><input type="text" id="g_contact_phone" class="form-control"></div>
+                        </div>
+                        
+                        <div class="grid-2">
+                            <div class="form-group"><label>Company</label><input type="text" id="g_contact_company" class="form-control"></div>
+                            <div class="form-group"><label>Approval Deadline</label><input type="date" id="g_approval" class="form-control"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-bar">
+                    <input type="file" id="importFile" style="display: none;" accept=".json">
+                    <label for="importFile" class="btn btn-secondary" style="margin:0; width: 50px; padding: 0; display:flex; justify-content:center;" title="Carregar Rascunho">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    </label>
+                    <button type="button" class="btn btn-secondary" style="width: 50px; padding: 0;" onclick="salvarRascunho()" title="Salvar Rascunho JSON">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
+                    </button>
+                    <button type="button" class="btn btn-primary" style="flex:1;" onclick="abrirModal()">
+                        Revisar e Gerar Pedido
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                </div>
+            </form>
+        </div> 
+
+        <div id="page-drafts" class="page-view">
+            <div class="section-header"><div class="section-title">Meus Rascunhos Salvos</div></div>
+            <div class="container-form-panel" style="text-align: center; padding: 60px 20px;">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <h3 style="color: var(--text-main); font-size: 1.2rem; margin: 0 0 10px 0;">Nenhum rascunho encontrado</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px;">Você ainda não salvou nenhum rascunho no seu navegador.</p>
+                <button type="button" class="btn btn-primary" onclick="showPage('page-form', document.querySelectorAll('.tab')[0])" style="width: auto; height: 45px;">✦ Criar Novo Draft</button>
+            </div>
+        </div>
+
+        <div id="page-templates" class="page-view">
+            <div class="section-header"><div class="section-title">Templates (Modelos Prontos)</div></div>
+            <div class="container-form-panel" style="text-align: center; padding: 60px 20px;">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px;">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+                <h3 style="color: var(--text-main); font-size: 1.2rem; margin: 0 0 10px 0;">Sem templates cadastrados</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">Crie templates para preencher automaticamente informações repetitivas.</p>
+            </div>
+        </div>
+
+        <div id="page-history" class="page-view">
+            <div class="section-header">
+                <div class="section-title">Histórico de Envios</div>
+            </div>
+            <div class="container-form-panel" style="text-align: center; padding: 60px 20px;">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <h3 style="color: var(--text-main); font-size: 1.2rem; margin: 0 0 10px 0;">Histórico Vazio</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">Os envios finalizados de Draft e CSV ficarão registrados aqui.</p>
+            </div>
+        </div>
+
+        <div id="page-help" class="page-view">
+            <div class="section-header"><div class="section-title">Portal Usage Guide</div></div>
+            
+            <div class="container-form-panel" style="margin-bottom: 20px;">
+                <h3 style="color: var(--primary); margin-top: 0;">How to use this portal</h3>
+                <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; padding-left: 20px;">
+                    <li><strong>Load a template</strong> (optional) to auto-fill recurring data such as Shipper and Consignee.</li>
+                    <li><strong>Fill in all mandatory fields</strong> marked with *.</li>
+                    <li><strong>Select shipment type:</strong> FCL (declare each container) or LCL (declare totals only — gross, net, CBM, quantity).</li>
+                    <li><strong>Describe the cargo</strong> in UPPERCASE in section 5, as per standard BL format.</li>
+                    <li><strong>Save Draft</strong> at any time to avoid losing data.</li>
+                    <li><strong>Click Continue</strong> to see a full preview of all answers before submitting.</li>
+                    <li><strong>Click Submit</strong> in the preview: the system generates a CSV, opens your email client pre-filled, and saves a PDF to your machine.</li>
+                </ul>
+            </div>
+            
+            <div class="container-form-panel" style="margin-bottom: 20px;">
+                <h3 style="color: var(--primary); margin-top: 0;">FCL vs LCL</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                    <strong>FCL (Full Container Load):</strong> The entire container is used by one shipper. Declare each container number, seal, type, packages, weight and CBM.<br><br>
+                    <strong>LCL (Less Container Load):</strong> Cargo shares a container with other shipments. Declare only totals: quantity, packing type, gross weight, net weight and CBM. No container numbers required.
+                </p>
+            </div>
+
+            <div class="container-form-panel" style="margin-bottom: 20px;">
+                <h3 style="color: var(--primary); margin-top: 0;">VGM</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                    Check "Submit VGM" to declare the Verified Gross Mass. Fill in VGM (kg), weighing method (Method 1 = weigh loaded container; Method 2 = sum cargo + packing + container tare), company name, authorized signatory and weighing date.
+                </p>
+            </div>
+
+            <div class="container-form-panel">
+                <h3 style="color: var(--primary); margin-top: 0;">CSV Submission</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                    When you confirm submission, the portal generates a <strong>.csv</strong> file and your email client opens automatically addressed to <strong>arthur.jacob@expeditors.com</strong> with subject <em>"Instrução de BL - [House]"</em>. Attach the CSV and send. A PDF summary is also saved locally.
+                </p>
+            </div>
+        </div>
+
+    </div> <div class="modal" id="reviewModal">
+        <div class="modal-content" id="modalContent">
+            <button class="close-modal" onclick="fecharModal()">&times;</button>
+            <div class="header" style="margin-bottom: 30px; text-align: left;">
+                <h1 style="font-size: 1.8rem;">Certificação Final</h1>
+                <p>Revise os dados. A tabela gerada será enviada para a operação.</p>
+            </div>
+            <div id="reviewData"></div>
+            <div class="actions-bar" style="margin-top: 30px; padding-top: 20px;">
+                <button type="button" class="btn btn-secondary" onclick="fecharModal()">Voltar</button>
+                <button type="button" class="btn btn-primary" style="flex:1;" onclick="gerarEEnviarExcel()">
+                    Enviar Ordem 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m2 21l21-9L2 3v7l15 2l-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <form id="draftForm">
-        
-        <div class="section-header">
-            <div class="section-title">Dados Gerais (BL)</div>
-            <button type="button" onclick="resetFormulario()" style="background: transparent; border: 1px dashed var(--danger); color: var(--danger); padding: 6px 14px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: inherit; font-size: 0.85rem; font-weight: 600; transition: var(--transition);" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                Resetar
-            </button>
-        </div>
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label class="required">1. BL Issuance</label>
-            <select id="f1_bl" class="form-control" required>
-                <option value="">Selecione...</option>
-                <option value="Sea Waybill / Express Release">Sea Waybill / Express Release</option>
-                <option value="Originais na Origem">Originais na Origem</option>
-                <option value="Originais no Destino">Originais no Destino</option>
-            </select>
-        </div>
-
-        <div class="grid-2">
-            <div class="form-group"><label class="required">2. Shipper</label><textarea id="f2_shipper" class="form-control" required></textarea></div>
-            <div class="form-group"><label class="required">3. Consignee</label><textarea id="f3_consignee" class="form-control" required></textarea></div>
-            <div class="form-group"><label class="required">4. Notify</label><textarea id="f4_notify" class="form-control" required></textarea></div>
-            <div class="form-group"><label>12. Marks and Number</label><textarea id="f12_marks" class="form-control"></textarea></div>
-        </div>
-
-        <div class="grid-3" style="margin-top: 20px;">
-            <div class="form-group"><label class="required">5. Vessel/Voy</label><input type="text" id="f5_vessel" class="form-control" required></div>
-            <div class="form-group"><label class="required">6. Port of Loading</label><input type="text" id="f6_pol" class="form-control" required></div>
-            <div class="form-group"><label class="required">7. Port of Discharge</label><input type="text" id="f7_pod" class="form-control" required></div>
-        </div>
-
-        <div class="grid-2" style="margin-top: 20px;">
-            <div class="form-group"><label>8. Place of Delivery</label><input type="text" id="f8_delivery" class="form-control"></div>
-            <div class="form-group"><label class="required">9. NCM <span class="hint">Apenas números</span></label><input type="number" id="f9_ncm" class="form-control" required></div>
-            <div class="form-group"><label>10. DUE <span class="hint">Letras/Números</span></label><input type="text" id="f10_due" class="form-control" pattern="[A-Za-z0-9]+"></div>
-            <div class="form-group"><label>11. RUC</label><input type="text" id="f11_ruc" class="form-control"></div>
-        </div>
-
-        <div class="form-group" style="margin-top: 20px;">
-            <label class="required">13. Description of Goods</label>
-            <input type="text" id="f13_desc" class="form-control" required>
-        </div>
-
-        <div class="grid-3" style="margin-top: 20px;">
-            <div class="form-group">
-                <label class="required">14. Freight Terms</label>
-                <select id="f14_freight" class="form-control" required>
-                    <option value="">Selecione...</option>
-                    <option value="Prepaid">Prepaid</option>
-                    <option value="Collect">Collect</option>
-                </select>
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="fecharModalEdicao()">&times;</button>
+            <div class="header" style="margin-bottom: 30px; text-align: left;">
+                <h1 style="font-size: 1.8rem; color: var(--danger);">Editar Container</h1>
             </div>
-            <div class="form-group">
-                <label class="required">15. Wood Declaration</label>
-                <select id="f15_wood" class="form-control" required>
-                    <option value="">Selecione...</option>
-                    <option value="Treated and Certified">Treated and Certified</option>
-                    <option value="Processed Wood">Processed Wood</option>
-                    <option value="Not Applicable">Not Applicable</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="required">16. Dangerous Goods</label>
-                <select id="f16_imo" class="form-control" required>
-                    <option value="">Selecione...</option>
-                    <option value="Não">Não (No)</option>
-                    <option value="Sim">Sim (Yes)</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="form-group" style="margin-top: 20px;">
-            <label>17. Comments</label>
-            <textarea id="f16_comments" class="form-control"></textarea>
-        </div>
-
-        <div class="section-header">
-            <div class="section-title">Dados dos Containers</div>
-        </div>
-        
-        <div class="container-form-panel">
             <div class="grid-2">
-                <div class="form-group"><label class="required">18. Container Number <span class="hint">Ex: EXPD1234567</span></label><input type="text" id="c_number" class="form-control" pattern="[A-Za-z0-9]+" style="text-transform: uppercase;"></div>
-                <div class="form-group"><label class="required">19. Lacre (Seal)</label><input type="text" id="c_lacre" class="form-control"></div>
+                <div class="form-group"><label class="required">Container Number</label><input type="text" id="e_number" class="form-control" style="text-transform: uppercase;"></div>
+                <div class="form-group"><label class="required">Lacre (Seal)</label><input type="text" id="e_lacre" class="form-control"></div>
             </div>
-
             <div class="grid-3" style="margin-top: 20px;">
                 <div class="form-group">
-                    <label class="required">20. Type</label>
-                    <select id="c_type" class="form-control">
+                    <label class="required">Type</label>
+                    <select id="e_type" class="form-control">
                         <option value="20 Standard Dry">20 Standard Dry</option>
-                        <option value="20 Reefer">20 Reefer</option>
-                        <option value="20 Flat Rack">20 Flat Rack</option>
-                        <option value="40 Standard Dry">40 Standard Dry</option>
                         <option value="40 High Cube">40 High Cube</option>
-                        <option value="40 Reefer">40 Reefer</option>
-                        <option value="40 Reefer High Cube">40 Reefer High Cube</option>
-                        <option value="40 Flat Rack">40 Flat Rack</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="required">21. Package</label>
-                    <select id="c_pkgType" class="form-control">
-                        <option value="Bag">Bag</option><option value="Big Bag">Big Bag</option><option value="Box">Box</option><option value="Carton">Carton</option><option value="Case">Case</option><option value="Drum">Drum</option><option value="Pallet">Pallet</option><option value="Roll">Roll</option><option value="Wooden Case">Wooden Case</option><option value="Wooden Crate">Wooden Crate</option><option value="Wooden Pallet">Wooden Pallet</option>
+                    <label class="required">Package</label>
+                    <select id="e_pkgType" class="form-control">
+                        <option value="Pallet">Pallet</option>
+                        <option value="Box">Box</option>
                     </select>
                 </div>
-                <div class="form-group"><label class="required">22. Qty</label><input type="number" id="c_qty" class="form-control"></div>
+                <div class="form-group"><label class="required">Qty</label><input type="number" id="e_qty" class="form-control"></div>
             </div>
-
             <div class="grid-4" style="margin-top: 20px;">
-                <div class="form-group"><label class="required">23. Tare (KG)</label><input type="number" id="c_tare" class="form-control"></div>
-                <div class="form-group"><label class="required">24. Gross (KG)</label><input type="number" id="c_gross" class="form-control"></div>
-                <div class="form-group"><label>25. Net (KG)</label><input type="number" id="c_net" class="form-control"></div>
-                <div class="form-group"><label>26. CBM <span class="hint">M³</span></label><input type="number" step="0.001" id="c_cbm" class="form-control"></div>
+                <div class="form-group"><label class="required">Tare (KG)</label><input type="number" id="e_tare" class="form-control"></div>
+                <div class="form-group"><label class="required">Gross (KG)</label><input type="number" id="e_gross" class="form-control"></div>
+                <div class="form-group"><label>Net (KG)</label><input type="number" id="e_net" class="form-control"></div>
+                <div class="form-group"><label>CBM (M³)</label><input type="number" step="0.001" id="e_cbm" class="form-control"></div>
             </div>
-            
-            <button type="button" id="btnAddContainer" class="btn btn-ghost" onclick="adicionarContainer()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Adicionar Este Container
-            </button>
-        </div>
-
-        <div id="containersList"></div>
-
-        <div class="actions-bar">
-            <input type="file" id="importFile" style="display: none;" accept=".json">
-            <label for="importFile" class="btn btn-secondary" style="margin:0; width: 50px; padding: 0; display:flex; justify-content:center;" title="Carregar Rascunho">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            </label>
-            <button type="button" class="btn btn-secondary" style="width: 50px; padding: 0;" onclick="salvarRascunho()" title="Salvar Rascunho">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-            </button>
-            <button type="button" class="btn btn-primary" style="flex:1;" onclick="abrirModal()">
-                Revisar e Gerar Pedido
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </button>
-        </div>
-    </form>
-</div>
-
-<div class="modal" id="reviewModal">
-    <div class="modal-content" id="modalContent">
-        <button class="close-modal" onclick="fecharModal()">&times;</button>
-        
-        <div class="header" style="margin-bottom: 30px; text-align: left;">
-            <h1 style="font-size: 1.8rem;">Certificação Final</h1>
-            <p>Revise os dados. A tabela gerada será enviada para a operação.</p>
-        </div>
-        
-        <div id="reviewData"></div>
-        
-        <div class="actions-bar" style="margin-top: 30px; padding-top: 20px;">
-            <button type="button" class="btn btn-secondary" onclick="fecharModal()">Voltar</button>
-            <button type="button" class="btn btn-primary" style="flex:1;" onclick="gerarEEnviarExcel()">
-                Enviar Ordem
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m2 21l21-9L2 3v7l15 2l-15 2z"/></svg>
-            </button>
+            <div class="actions-bar" style="margin-top: 35px; padding-top: 25px;">
+                <button type="button" class="btn btn-secondary" onclick="fecharModalEdicao()">Cancelar</button>
+                <button type="button" class="btn btn-primary" style="flex:1; background: var(--warning);" onclick="salvarEdicaoModal()">Salvar Alterações</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="modal" id="editModal">
-    <div class="modal-content">
-        <button class="close-modal" onclick="fecharModalEdicao()">&times;</button>
-        
-        <div class="header" style="margin-bottom: 30px; text-align: left;">
-            <h1 style="font-size: 1.8rem; color: var(--danger);">Editar Container</h1>
-            <p>Altere as informações específicas deste equipamento.</p>
-        </div>
-        
-        <div class="grid-2">
-            <div class="form-group"><label class="required">Container Number</label><input type="text" id="e_number" class="form-control" style="text-transform: uppercase;"></div>
-            <div class="form-group"><label class="required">Lacre (Seal)</label><input type="text" id="e_lacre" class="form-control"></div>
-        </div>
-
-        <div class="grid-3" style="margin-top: 20px;">
-            <div class="form-group">
-                <label class="required">Type</label>
-                <select id="e_type" class="form-control">
-                    <option value="20 Standard Dry">20 Standard Dry</option><option value="20 Reefer">20 Reefer</option><option value="20 Flat Rack">20 Flat Rack</option><option value="40 Standard Dry">40 Standard Dry</option><option value="40 High Cube">40 High Cube</option><option value="40 Reefer">40 Reefer</option><option value="40 Reefer High Cube">40 Reefer High Cube</option><option value="40 Flat Rack">40 Flat Rack</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="required">Package</label>
-                <select id="e_pkgType" class="form-control">
-                    <option value="Bag">Bag</option><option value="Big Bag">Big Bag</option><option value="Box">Box</option><option value="Carton">Carton</option><option value="Case">Case</option><option value="Drum">Drum</option><option value="Pallet">Pallet</option><option value="Roll">Roll</option><option value="Wooden Case">Wooden Case</option><option value="Wooden Crate">Wooden Crate</option><option value="Wooden Pallet">Wooden Pallet</option>
-                </select>
-            </div>
-            <div class="form-group"><label class="required">Qty</label><input type="number" id="e_qty" class="form-control"></div>
-        </div>
-
-        <div class="grid-4" style="margin-top: 20px;">
-            <div class="form-group"><label class="required">Tare (KG)</label><input type="number" id="e_tare" class="form-control"></div>
-            <div class="form-group"><label class="required">Gross (KG)</label><input type="number" id="e_gross" class="form-control"></div>
-            <div class="form-group"><label>Net (KG)</label><input type="number" id="e_net" class="form-control"></div>
-            <div class="form-group"><label>CBM (M³)</label><input type="number" step="0.001" id="e_cbm" class="form-control"></div>
-        </div>
-
-        <div class="actions-bar" style="margin-top: 35px; padding-top: 25px;">
-            <button type="button" class="btn btn-secondary" onclick="fecharModalEdicao()">Cancelar</button>
-            <button type="button" class="btn btn-primary" style="flex:1; background: var(--warning); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);" onclick="salvarEdicaoModal()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                Salvar Alterações
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // =========================================================================
-    // VARIÁVEIS GLOBAIS E ESTADO
-    // =========================================================================
-    let listaContainers = [];
-    let editIndex = -1; 
-    let draggedItemIndex = null;
-
-    // =========================================================================
-    // FECHAR MODAIS CLICANDO FORA
-    // =========================================================================
-    window.addEventListener('click', function(e) {
-        if (e.target.id === 'reviewModal') fecharModal();
-        if (e.target.id === 'editModal') fecharModalEdicao();
-    });
-
-    // =========================================================================
-    // RESET DO FORMULÁRIO GERAL
-    // =========================================================================
-    function resetFormulario() {
-        if(confirm("Tem certeza que deseja apagar todos os dados do formulário? Esta ação não pode ser desfeita.")) {
-            document.getElementById('draftForm').reset();
-            listaContainers = [];
-            atualizarListaUI();
-            localStorage.removeItem('draft_expeditors_cache');
-        }
-    }
-
-    // =========================================================================
-    // LÓGICA DE CONTAINERS (ADICIONAR)
-    // =========================================================================
-    function adicionarContainer() {
-        const cnt = {
-            num: document.getElementById('c_number').value.toUpperCase(),
-            lacre: document.getElementById('c_lacre').value,
-            type: document.getElementById('c_type').value,
-            pkg: document.getElementById('c_pkgType').value,
-            qty: document.getElementById('c_qty').value,
-            tare: document.getElementById('c_tare').value,
-            gross: document.getElementById('c_gross').value,
-            net: document.getElementById('c_net').value,
-            cbm: document.getElementById('c_cbm').value
-        };
-
-        if(!cnt.num || !cnt.lacre || !cnt.qty || !cnt.tare || !cnt.gross) {
-            alert("Preencha todos os campos obrigatórios do Container (Número, Lacre, Tare, Qty e Gross Weight).");
-            return;
+    <script>
+        // =========================================================================
+        // MENU E NAVEGAÇÃO
+        // =========================================================================
+        function toggleMobileMenu() { 
+            document.querySelector('.subbar').classList.toggle('show-mobile'); 
         }
 
-        listaContainers.push(cnt);
-        limparFormContainer();
-        atualizarListaUI();
-        salvarLocalStorage();
-    }
-
-    function limparFormContainer() {
-        const campos = ['c_number','c_lacre','c_qty','c_tare','c_gross','c_net','c_cbm'];
-        campos.forEach(c => document.getElementById(c).value = '');
-        document.getElementById('c_number').focus();
-    }
-
-    function removerContainer(index) {
-        listaContainers.splice(index, 1);
-        atualizarListaUI();
-        salvarLocalStorage();
-    }
-
-    // =========================================================================
-    // LÓGICA DE CONTAINERS (MODAL DE EDIÇÃO)
-    // =========================================================================
-    function abrirModalEdicao(index) {
-        editIndex = index;
-        const cnt = listaContainers[index];
-        
-        document.getElementById('e_number').value = cnt.num;
-        document.getElementById('e_lacre').value = cnt.lacre;
-        document.getElementById('e_type').value = cnt.type;
-        document.getElementById('e_pkgType').value = cnt.pkg;
-        document.getElementById('e_qty').value = cnt.qty;
-        document.getElementById('e_tare').value = cnt.tare;
-        document.getElementById('e_gross').value = cnt.gross;
-        document.getElementById('e_net').value = cnt.net;
-        document.getElementById('e_cbm').value = cnt.cbm;
-        
-        document.getElementById('editModal').classList.add('show');
-    }
-
-    function fecharModalEdicao() {
-        document.getElementById('editModal').classList.remove('show');
-        editIndex = -1;
-    }
-
-    function salvarEdicaoModal() {
-        if(editIndex === -1) return;
-
-        const cnt = {
-            num: document.getElementById('e_number').value.toUpperCase(),
-            lacre: document.getElementById('e_lacre').value,
-            type: document.getElementById('e_type').value,
-            pkg: document.getElementById('e_pkgType').value,
-            qty: document.getElementById('e_qty').value,
-            tare: document.getElementById('e_tare').value,
-            gross: document.getElementById('e_gross').value,
-            net: document.getElementById('e_net').value,
-            cbm: document.getElementById('e_cbm').value
-        };
-
-        if(!cnt.num || !cnt.lacre || !cnt.qty || !cnt.tare || !cnt.gross) {
-            alert("Preencha todos os campos obrigatórios.");
-            return;
+        function showPage(pageId, tabElement) {
+            document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            tabElement.classList.add('active');
+            if (window.innerWidth <= 768) { 
+                document.querySelector('.subbar').classList.remove('show-mobile'); 
+            }
         }
 
-        listaContainers[editIndex] = cnt;
-        fecharModalEdicao();
-        atualizarListaUI();
-        salvarLocalStorage();
-    }
+        function toggleSection(secId) { 
+            document.getElementById(secId).classList.toggle('collapsed'); 
+        }
 
-    // =========================================================================
-    // DRAG AND DROP & UI DA LISTA
-    // =========================================================================
-    function atualizarListaUI() {
-        const listDiv = document.getElementById('containersList');
-        listDiv.innerHTML = '';
-        
-        listaContainers.forEach((cnt, index) => {
-            const badge = document.createElement('div');
-            badge.className = 'container-badge';
-            badge.draggable = true;
+        let currentMode = 'FCL';
+        function setMode(mode) {
+            currentMode = mode;
+            if (mode === 'FCL') {
+                document.getElementById('btn_fcl').classList.add('active');
+                document.getElementById('btn_lcl').classList.remove('active');
+                document.getElementById('block_fcl').style.display = 'block';
+                document.getElementById('block_lcl').style.display = 'none';
+            } else {
+                document.getElementById('btn_lcl').classList.add('active');
+                document.getElementById('btn_fcl').classList.remove('active');
+                document.getElementById('block_lcl').style.display = 'block';
+                document.getElementById('block_fcl').style.display = 'none';
+            }
+            salvarLocalStorage(); 
+        }
+
+        function toggleDGBlock() {
+            const val = document.getElementById('g_imo').value;
+            document.getElementById('dg_block').style.display = (val === 'Sim') ? 'block' : 'none';
+        }
+
+        function calcFCLTotals() {
+            let pkgs = 0, gw = 0, cbm = 0;
+            listaContainers.forEach(c => {
+                pkgs += parseFloat(c.qty) || 0;
+                gw += parseFloat(c.gross) || 0;
+                cbm += parseFloat(c.cbm) || 0;
+            });
+            document.getElementById('fcl_tot_cnt').textContent = listaContainers.length;
+            document.getElementById('fcl_tot_pkg').textContent = pkgs;
+            document.getElementById('fcl_tot_gw').textContent = gw.toFixed(2) + ' kg';
+            document.getElementById('fcl_tot_cbm').textContent = cbm.toFixed(3) + ' m³';
+        }
+
+        function calcLCL() {
+            const gw = parseFloat(document.getElementById('lcl_gross').value) || 0;
+            const cbm = parseFloat(document.getElementById('lcl_cbm').value) || 0;
+            const chargeableKg = Math.max(gw, cbm * 1000);
+            const revenueTon = Math.max(gw / 1000, cbm);
+            document.getElementById('lcl_chg_wt').innerHTML = `${chargeableKg.toFixed(2)} kg <span style="font-size:0.8rem; color:var(--text-muted);">(${revenueTon.toFixed(3)} RT)</span>`;
+            salvarLocalStorage();
+        }
+
+        // =========================================================================
+        // COLETA GERAL DE DADOS (ATUALIZADA)
+        // =========================================================================
+        function getGeneralData() {
+            // Coletar docs_dest que estão checados
+            const docs = Array.from(document.querySelectorAll('input[name="docs_dest"]:checked'))
+                              .map(cb => cb.value).join(', ');
+
+            return {
+                bl: document.getElementById('g_bl').value, 
+                freight: document.getElementById('g_freight').value,
+                service: document.getElementById('g_service').value,
+                receipt: document.getElementById('g_receipt').value,
+                pol: document.getElementById('g_pol').value,
+                transship: document.getElementById('g_transship').value,
+                pod: document.getElementById('g_pod').value, 
+                delivery: document.getElementById('g_delivery').value,
+                vessel: document.getElementById('g_vessel').value, 
+                voyage: document.getElementById('g_voyage').value,
+                etd: document.getElementById('g_etd').value,
+                eta: document.getElementById('g_eta').value,
+                cutoff: document.getElementById('g_cutoff').value,
+                
+                shipper: document.getElementById('g_shipper').value,
+                consignee: document.getElementById('g_consignee').value, 
+                notify: document.getElementById('g_notify').value,
+                
+                desc: document.getElementById('g_desc').value, 
+                marks: document.getElementById('g_marks').value,
+                ncm: document.getElementById('g_ncm').value, 
+                ruc: document.getElementById('g_ruc').value, 
+                wood: document.getElementById('g_wood').value, 
+                imo: document.getElementById('g_imo').value,
+                comments: document.getElementById('g_comments').value,
+                
+                inv_num: document.getElementById('g_inv_num').value,
+                inv_date: document.getElementById('g_inv_date').value,
+                pack_list: document.getElementById('g_pack_list').value,
+                due: document.getElementById('g_due').value,
+                cert_origin: document.getElementById('g_cert_origin').value,
+                co_num: document.getElementById('g_co_num').value,
+                lc: document.getElementById('g_lc').value,
+                lc_bank: document.getElementById('g_lc_bank').value,
+                docs_dest: docs,
+                
+                spec_instr: document.getElementById('g_spec_instr').value,
+                contact_name: document.getElementById('g_contact_name').value,
+                contact_email: document.getElementById('g_contact_email').value,
+                contact_phone: document.getElementById('g_contact_phone').value,
+                contact_company: document.getElementById('g_contact_company').value,
+                approval: document.getElementById('g_approval').value
+            };
+        }
+
+        function getLCLData() {
+            return {
+                mode: currentMode,
+                qty: document.getElementById('lcl_qty').value,
+                pkg: document.getElementById('lcl_pkg').value,
+                cbm: document.getElementById('lcl_cbm').value,
+                gross: document.getElementById('lcl_gross').value,
+                net: document.getElementById('lcl_net').value
+            };
+        }
+
+        // =========================================================================
+        // LÓGICA DE CONTAINERS 
+        // =========================================================================
+        let listaContainers = [];
+        let editIndex = -1; 
+        let draggedItemIndex = null;
+
+        window.addEventListener('click', function(e) {
+            if (e.target.id === 'reviewModal') fecharModal();
+            if (e.target.id === 'editModal') fecharModalEdicao();
+        });
+
+        function resetFormulario() {
+            if (confirm("Tem certeza que deseja apagar todos os dados do formulário? Esta ação não pode ser desfeita.")) {
+                document.getElementById('draftForm').reset();
+                listaContainers = [];
+                atualizarListaUI();
+                document.getElementById('lcl_chg_wt').innerHTML = '0.00 kg <span style="font-size:0.8rem; color:var(--text-muted);">(0.000 RT)</span>';
+                localStorage.removeItem('draft_expeditors_cache');
+            }
+        }
+
+        function adicionarContainer() {
+            const cnt = {
+                num: document.getElementById('c_number').value.toUpperCase(),
+                lacre: document.getElementById('c_lacre').value, 
+                type: document.getElementById('c_type').value,
+                pkg: document.getElementById('c_pkgType').value, 
+                qty: document.getElementById('c_qty').value,
+                tare: document.getElementById('c_tare').value, 
+                gross: document.getElementById('c_gross').value,
+                net: document.getElementById('c_net').value, 
+                cbm: document.getElementById('c_cbm').value
+            };
+            if (!cnt.num || !cnt.lacre || !cnt.qty || !cnt.tare || !cnt.gross) { 
+                alert("Preencha os campos obrigatórios do Container."); 
+                return; 
+            }
+            listaContainers.push(cnt); 
+            limparFormContainer(); 
+            atualizarListaUI(); 
+            salvarLocalStorage();
+        }
+
+        function limparFormContainer() {
+            ['c_number','c_lacre','c_qty','c_tare','c_gross','c_net','c_cbm'].forEach(c => document.getElementById(c).value = '');
+            document.getElementById('c_number').focus();
+        }
+
+        function removerContainer(index) { 
+            listaContainers.splice(index, 1); 
+            atualizarListaUI(); 
+            salvarLocalStorage(); 
+        }
+
+        function abrirModalEdicao(index) {
+            editIndex = index; 
+            const cnt = listaContainers[index];
+            ['e_number','e_lacre','e_type','e_pkgType','e_qty','e_tare','e_gross','e_net','e_cbm'].forEach((id, i) => {
+                document.getElementById(id).value = Object.values(cnt)[i];
+            });
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function fecharModalEdicao() { 
+            document.getElementById('editModal').classList.remove('show'); 
+            editIndex = -1; 
+        }
+
+        function salvarEdicaoModal() {
+            if (editIndex === -1) return;
+            const cnt = {
+                num: document.getElementById('e_number').value.toUpperCase(), 
+                lacre: document.getElementById('e_lacre').value,
+                type: document.getElementById('e_type').value, 
+                pkg: document.getElementById('e_pkgType').value,
+                qty: document.getElementById('e_qty').value, 
+                tare: document.getElementById('e_tare').value,
+                gross: document.getElementById('e_gross').value, 
+                net: document.getElementById('e_net').value, 
+                cbm: document.getElementById('e_cbm').value
+            };
+            if (!cnt.num || !cnt.lacre || !cnt.qty || !cnt.tare || !cnt.gross) { 
+                alert("Preencha todos os campos obrigatórios."); 
+                return; 
+            }
+            listaContainers[editIndex] = cnt; 
+            fecharModalEdicao(); 
+            atualizarListaUI(); 
+            salvarLocalStorage();
+        }
+
+        function atualizarListaUI() {
+            const listDiv = document.getElementById('containersList');
+            listDiv.innerHTML = '';
+            listaContainers.forEach((cnt, index) => {
+                const badge = document.createElement('div');
+                badge.className = 'container-badge'; 
+                badge.draggable = true;
+                
+                badge.addEventListener('dragstart', (e) => { 
+                    draggedItemIndex = index; 
+                    setTimeout(() => badge.classList.add('dragging'), 0); 
+                });
+                badge.addEventListener('dragend', () => { 
+                    badge.classList.remove('dragging'); 
+                    draggedItemIndex = null; 
+                });
+                badge.addEventListener('dragover', (e) => { e.preventDefault(); });
+                badge.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    if (draggedItemIndex !== null && draggedItemIndex !== index) {
+                        const draggedItem = listaContainers.splice(draggedItemIndex, 1)[0];
+                        listaContainers.splice(index, 0, draggedItem);
+                        atualizarListaUI(); 
+                        salvarLocalStorage();
+                    }
+                });
+
+                badge.innerHTML = `
+                    <div class="drag-handle" title="Arraste para reordenar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="container-info">
+                        <span><strong>#${index + 1} | ${cnt.num}</strong> (${cnt.type})</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${cnt.qty}x ${cnt.pkg}s - GW: ${cnt.gross}kg - Lacre: ${cnt.lacre}</span>
+                    </div>
+                    <div class="container-actions">
+                        <button type="button" class="action-icon" onclick="abrirModalEdicao(${index})">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="action-icon delete" onclick="removerContainer(${index})">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                listDiv.appendChild(badge);
+            });
+            calcFCLTotals(); 
+        }
+
+        function abrirModal() {
+            const g = getGeneralData();
             
-            badge.addEventListener('dragstart', (e) => {
-                draggedItemIndex = index;
-                setTimeout(() => badge.classList.add('dragging'), 0);
-            });
-            badge.addEventListener('dragend', () => {
-                badge.classList.remove('dragging');
-                draggedItemIndex = null;
-            });
-            badge.addEventListener('dragover', (e) => { e.preventDefault(); });
-            badge.addEventListener('drop', (e) => {
-                e.preventDefault();
-                if (draggedItemIndex !== null && draggedItemIndex !== index) {
-                    const draggedItem = listaContainers.splice(draggedItemIndex, 1)[0];
-                    listaContainers.splice(index, 0, draggedItem);
-                    atualizarListaUI();
-                    salvarLocalStorage();
-                }
-            });
+            if (!g.bl || !g.pol || !g.pod || !g.vessel || !g.voyage || !g.shipper || !g.consignee || !g.notify || !g.desc || !g.ncm || !g.inv_num || !g.contact_name || !g.contact_email) {
+                alert("Preencha todos os campos obrigatórios (marcados com *) em todas as seções antes de revisar."); 
+                return;
+            }
 
-            badge.innerHTML = `
-                <div class="drag-handle" title="Arraste para reordenar">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                </div>
-                <div class="container-info">
-                    <span><strong>#${index + 1} | ${cnt.num}</strong> (${cnt.type})</span>
-                    <span style="font-size: 0.8rem; color: var(--text-muted);">
-                        ${cnt.qty}x ${cnt.pkg}s - GW: ${cnt.gross}kg - Lacre: ${cnt.lacre}
-                    </span>
-                </div>
-                <div class="container-actions">
-                    <button type="button" class="action-icon" onclick="abrirModalEdicao(${index})" title="Editar">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button type="button" class="action-icon delete" onclick="removerContainer(${index})" title="Excluir">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
+            let html = `
+                <div class="review-card">
+                    <div class="review-card-title">ROUTING & VESSEL</div>
+                    <div class="review-data-grid" style="margin-bottom: 20px;">
+                        <div><span class="review-label">Vessel/Voy:</span> <span class="review-value">${g.vessel} / ${g.voyage}</span></div>
+                        <div><span class="review-label">POL:</span> <span class="review-value">${g.pol}</span></div>
+                        <div><span class="review-label">POD:</span> <span class="review-value">${g.pod}</span></div>
+                        <div><span class="review-label">ETD / ETA:</span> <span class="review-value">${g.etd || '-'} / ${g.eta || '-'}</span></div>
+                    </div>
+                    
+                    <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px; margin-bottom: 20px;">
+                        <div><span class="review-label">Shipper:</span> <span class="review-value">${g.shipper.replace(/\n/g, '<br>')}</span></div>
+                        <div><span class="review-label">Consignee:</span> <span class="review-value">${g.consignee.replace(/\n/g, '<br>')}</span></div>
+                    </div>
+
+                    <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px;">
+                        <div><span class="review-label">Invoice Number:</span> <span class="review-value">${g.inv_num}</span></div>
+                        <div><span class="review-label">RE / DU-E:</span> <span class="review-value">${g.due || '-'}</span></div>
+                        <div><span class="review-label">Contact Name:</span> <span class="review-value">${g.contact_name} (${g.contact_email})</span></div>
+                        <div><span class="review-label">Dangerous Goods:</span> <span class="review-value" style="color: ${g.imo === 'Sim' ? 'var(--danger)' : 'inherit'};">${g.imo}</span></div>
+                    </div>
                 </div>
             `;
-            listDiv.appendChild(badge);
-        });
-    }
 
-    // =========================================================================
-    // COLETA E REVISÃO DE DADOS (MODAL)
-    // =========================================================================
-    function getGeneralData() {
-        return {
-            bl: document.getElementById('f1_bl').value, 
-            shipper: document.getElementById('f2_shipper').value,
-            consignee: document.getElementById('f3_consignee').value, 
-            notify: document.getElementById('f4_notify').value,
-            vessel: document.getElementById('f5_vessel').value, 
-            pol: document.getElementById('f6_pol').value,
-            pod: document.getElementById('f7_pod').value, 
-            delivery: document.getElementById('f8_delivery').value,
-            ncm: document.getElementById('f9_ncm').value, 
-            due: document.getElementById('f10_due').value,
-            ruc: document.getElementById('f11_ruc').value, 
-            marks: document.getElementById('f12_marks').value,
-            desc: document.getElementById('f13_desc').value, 
-            freight: document.getElementById('f14_freight').value,
-            wood: document.getElementById('f15_wood').value, 
-            imo: document.getElementById('f16_imo').value,     // <-- CAMPO NOVO AQUI
-            comments: document.getElementById('f16_comments').value
-        };
-    }
-
-    function abrirModal() {
-        const g = getGeneralData();
-        
-        if(!g.bl || !g.shipper || !g.consignee || !g.vessel || !g.pol || !g.pod || !g.ncm || !g.desc || !g.freight || !g.wood) {
-            alert("Preencha todos os campos obrigatórios da Seção 1 (marcados com *)."); 
-            return;
-        }
-        if(listaContainers.length === 0) { 
-            alert("Adicione pelo menos 1 Container na Seção 2."); 
-            return; 
-        }
-
-        let html = `
-            <div class="review-card">
-                <div class="review-card-title">DADOS GERAIS (BL)</div>
-                <div class="review-data-grid" style="margin-bottom: 20px;">
-                    <div><span class="review-label">BL Issuance:</span> <span class="review-value">${g.bl}</span></div>
-                    <div><span class="review-label">Vessel/Voy:</span> <span class="review-value">${g.vessel}</span></div>
-                    <div><span class="review-label">POL:</span> <span class="review-value">${g.pol}</span></div>
-                    <div><span class="review-label">POD:</span> <span class="review-value">${g.pod}</span></div>
-                    <div><span class="review-label">Place of Delivery:</span> <span class="review-value">${g.delivery || '-'}</span></div>
-                    <div><span class="review-label">Freight Terms:</span> <span class="review-value">${g.freight}</span></div>
-                    <div><span class="review-label">NCM:</span> <span class="review-value">${g.ncm}</span></div>
-                    <div><span class="review-label">DUE:</span> <span class="review-value">${g.due || '-'}</span></div>
-                    <div><span class="review-label">RUC:</span> <span class="review-value">${g.ruc || '-'}</span></div>
-                    <div><span class="review-label">Wood Decl:</span> <span class="review-value">${g.wood}</span></div>
-                    <div><span class="review-label">Dangerous Goods:</span> <span class="review-value" style="color: ${g.imo === 'Sim' ? 'var(--danger)' : 'inherit'};">${g.imo}</span></div>
-                </div>
-                
-                <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px;">
-                    <div><span class="review-label">Shipper:</span> <span class="review-value">${g.shipper.replace(/\n/g, '<br>')}</span></div>
-                    <div><span class="review-label">Consignee:</span> <span class="review-value">${g.consignee.replace(/\n/g, '<br>')}</span></div>
-                    <div><span class="review-label">Notify:</span> <span class="review-value">${g.notify.replace(/\n/g, '<br>')}</span></div>
-                    <div><span class="review-label">Description of Goods:</span> <span class="review-value">${g.desc}</span></div>
-                    <div><span class="review-label">Marks & Numbers:</span> <span class="review-value">${g.marks.replace(/\n/g, '<br>') || '-'}</span></div>
-                    <div><span class="review-label">Comments:</span> <span class="review-value">${g.comments.replace(/\n/g, '<br>') || '-'}</span></div>
-                </div>
-            </div>
-            
-            <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin: 30px 0 15px;">
-                CONTAINERS ADICIONADOS (${listaContainers.length})
-            </div>
-        `;
-        
-        listaContainers.forEach((cnt, i) => {
-            html += `
-            <div class="review-card">
-                <div class="review-card-title" style="color: var(--primary);">
-                    <span>Container #${i+1} | ${cnt.num}</span>
-                    <span style="color: var(--text-muted); font-size: 0.9rem;">${cnt.type}</span>
-                </div>
-                <div class="review-data-grid">
-                    <div><span class="review-label">Lacre (Seal):</span> <span class="review-value">${cnt.lacre}</span></div>
-                    <div><span class="review-label">Package Type:</span> <span class="review-value">${cnt.pkg}</span></div>
-                    <div><span class="review-label">Quantidade:</span> <span class="review-value">${cnt.qty}</span></div>
-                    <div><span class="review-label">CBM:</span> <span class="review-value">${cnt.cbm || '-'} m³</span></div>
-                    <div><span class="review-label">Tare Weight:</span> <span class="review-value">${cnt.tare} kg</span></div>
-                    <div><span class="review-label">Gross Weight:</span> <span class="review-value">${cnt.gross} kg</span></div>
-                    <div style="grid-column: span 2;"><span class="review-label">Net Weight:</span> <span class="review-value">${cnt.net || '-'} kg</span></div>
-                </div>
-            </div>`;
-        });
-
-        document.getElementById('reviewData').innerHTML = html;
-        document.getElementById('reviewModal').classList.add('show');
-    }
-
-    function fecharModal() { 
-        document.getElementById('reviewModal').classList.remove('show'); 
-    }
-
-    // =========================================================================
-    // EXPORTAÇÃO EXCEL (.XLS) E EMAIL
-    // =========================================================================
-    function gerarEEnviarExcel() {
-        const g = getGeneralData();
-        
-        let tabelaHTML = `
-            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head><meta charset="utf-8"></head>
-            <body>
-            <table border="1" style="font-family: Arial; font-size: 11px; border-collapse: collapse;">
-                <thead>
-                    <tr style="background-color: #0f172a; color: #ffffff; font-weight: bold; text-align: center;">
-                        <th>BL ISSUANCE</th><th>SHIPPER</th><th>CONSIGNEE</th><th>NOTIFY</th>
-                        <th>VESSEL/VOY</th><th>POL</th><th>POD</th><th>DELIVERY</th>
-                        <th>NCM</th><th>DUE</th><th>RUC</th><th>MARKS & NOS</th>
-                        <th>DESC. GOODS</th><th>FREIGHT</th><th>WOOD DECL.</th><th style="background-color:#f59e0b;">DANGEROUS GOODS</th><th>COMMENTS</th>
-                        <th style="background-color:#ef4444;">CONT. NUMBER</th><th style="background-color:#ef4444;">SEAL</th>
-                        <th style="background-color:#ef4444;">TYPE</th><th style="background-color:#ef4444;">TARE (KG)</th>
-                        <th style="background-color:#ef4444;">QTY</th><th style="background-color:#ef4444;">PKG TYPE</th>
-                        <th style="background-color:#ef4444;">GROSS WT (KG)</th><th style="background-color:#ef4444;">NET WT (KG)</th><th style="background-color:#ef4444;">CBM</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-                
-        listaContainers.forEach(cnt => {
-            tabelaHTML += `
-                <tr style="text-align: center; vertical-align: middle;">
-                    <td>${g.bl}</td><td>${g.shipper.replace(/\n/g, '<br>')}</td><td>${g.consignee.replace(/\n/g, '<br>')}</td><td>${g.notify.replace(/\n/g, '<br>')}</td>
-                    <td>${g.vessel}</td><td>${g.pol}</td><td>${g.pod}</td><td>${g.delivery}</td>
-                    <td>${g.ncm}</td><td>${g.due}</td><td>${g.ruc}</td><td>${g.marks.replace(/\n/g, '<br>')}</td>
-                    <td>${g.desc}</td><td>${g.freight}</td><td>${g.wood}</td><td style="font-weight:bold; color:${g.imo === 'Sim' ? 'red' : 'black'};">${g.imo}</td><td>${g.comments.replace(/\n/g, '<br>')}</td>
-                    <td style="font-weight:bold;">${cnt.num}</td><td>${cnt.lacre}</td><td>${cnt.type}</td><td>${cnt.tare}</td>
-                    <td>${cnt.qty}</td><td>${cnt.pkg}</td><td>${cnt.gross}</td><td>${cnt.net || ''}</td><td>${cnt.cbm || ''}</td>
-                </tr>`;
-        });
-        
-        tabelaHTML += `</tbody></table></body></html>`;
-
-        const blob = new Blob([tabelaHTML], { type: 'application/vnd.ms-excel' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `BookingDraft_${g.vessel.replace(/[^a-z0-9]/gi, '_')}.xls`;
-        a.click();
-        
-        // Download da planilha já aconteceu acima... agora disparamos o e-mail
-        
-        // E-mail temporário (pode ser qualquer um até criarmos a interface dinâmica)
-        const emailTo = "guinamijonas@gmail.com"; 
-        
-        // Assunto dinâmico puxando o nome do Shipper
-        const subject = encodeURIComponent(`Draft OXP - ${g.shipper.split('\n')[0]}`);
-        
-        // Mensagem automática do cliente para a operação
-        const mensagemCliente = "Aqui está o Draft do pedido OXP com os dados do pedido! Caso houver algum erro, mande novamente para mim!";
-        
-        // Corpo do e-mail estruturado
-        const body = encodeURIComponent(`${mensagemCliente}\n\n----------------------\nResumo:\nNavio: ${g.vessel}\nPOL: ${g.pol} / POD: ${g.pod}\nTotal de Containers: ${listaContainers.length}\n\n(Lembrete: Anexe a planilha XLS que acabou de ser baixada neste e-mail antes de enviar)`);
-        
-        // Abre o cliente de e-mail padrão do computador/celular da pessoa
-        window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
-        
-        fecharModal();
-    }
-
-    // =========================================================================
-    // IMPORTAR / EXPORTAR RASCUNHO (JSON)
-    // =========================================================================
-    function salvarRascunho() {
-        const payload = JSON.stringify({ general: getGeneralData(), containers: listaContainers }, null, 2);
-        const blob = new Blob([payload], { type: "application/json" });
-        const a = document.createElement('a'); 
-        a.href = URL.createObjectURL(blob); 
-        a.download = "rascunho_instrucao.json"; 
-        a.click();
-    }
-    
-    document.getElementById('importFile').addEventListener('change', function(e) {
-        const file = e.target.files[0]; 
-        if(!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.general) {
-                    Object.keys(data.general).forEach(key => { 
-                        // Mapeamento direto de ID
-                        const map = {
-                            bl: 'f1_bl', shipper: 'f2_shipper', consignee: 'f3_consignee', notify: 'f4_notify',
-                            vessel: 'f5_vessel', pol: 'f6_pol', pod: 'f7_pod', delivery: 'f8_delivery',
-                            ncm: 'f9_ncm', due: 'f10_due', ruc: 'f11_ruc', marks: 'f12_marks',
-                            desc: 'f13_desc', freight: 'f14_freight', wood: 'f15_wood', comments: 'f16_comments'
-                        };
-                        const el = document.getElementById(map[key]); 
-                        if(el) el.value = data.general[key]; 
-                    });
+            if (currentMode === 'FCL') {
+                if (listaContainers.length === 0) { 
+                    alert("Adicione pelo menos 1 Container."); 
+                    return; 
                 }
-                listaContainers = data.containers || []; 
-                atualizarListaUI();
-                alert("Rascunho carregado com sucesso!");
-            } catch(err) { 
-                alert("Erro ao carregar rascunho. Arquivo inválido."); 
+                html += `<div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin: 30px 0 15px;">CONTAINERS ADICIONADOS (${listaContainers.length})</div>`;
+                listaContainers.forEach((cnt, i) => {
+                    html += `
+                    <div class="review-card">
+                        <div class="review-card-title" style="color: var(--primary);">
+                            <span>Container #${i+1} | ${cnt.num}</span><span style="color: var(--text-muted); font-size: 0.9rem;">${cnt.type}</span>
+                        </div>
+                        <div class="review-data-grid">
+                            <div><span class="review-label">Quantidade:</span> <span class="review-value">${cnt.qty}x ${cnt.pkg}</span></div>
+                            <div><span class="review-label">Gross Weight:</span> <span class="review-value">${cnt.gross} kg</span></div>
+                            <div><span class="review-label">CBM:</span> <span class="review-value">${cnt.cbm || '-'} m³</span></div>
+                            <div><span class="review-label">Lacre (Seal):</span> <span class="review-value">${cnt.lacre}</span></div>
+                        </div>
+                    </div>`;
+                });
+            } else {
+                const lcl = getLCLData();
+                html += `
+                    <div style="font-weight: 700; color: var(--warning); font-size: 1.05rem; margin: 30px 0 15px;">CARGA SOLTA (LCL)</div>
+                    <div class="review-card" style="border-left-color: var(--warning);">
+                        <div class="review-data-grid">
+                            <div><span class="review-label">Quantidade:</span> <span class="review-value">${lcl.qty}x ${lcl.pkg}</span></div>
+                            <div><span class="review-label">Gross Weight:</span> <span class="review-value">${lcl.gross} kg</span></div>
+                            <div><span class="review-label">Volume (CBM):</span> <span class="review-value">${lcl.cbm} m³</span></div>
+                        </div>
+                    </div>`;
             }
-        }; 
-        reader.readAsText(file);
-    });
 
-    // =========================================================================
-    // MODO NOTURNO / CLARO
-    // =========================================================================
-    function toggleTheme() {
-        const htmlEl = document.documentElement;
-        const currentTheme = htmlEl.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        htmlEl.setAttribute('data-theme', newTheme);
-        
-        // Salva a preferência de cor no LocalStorage
-        localStorage.setItem('draft_theme_exp', newTheme);
-        
-        const icon = document.getElementById('themeIcon');
-        if (newTheme === 'light') {
-            icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
-        } else {
-            icon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
-        }
-    }
-
-    // =========================================================================
-    // AUTO-SAVE (LOCALSTORAGE)
-    // =========================================================================
-    function salvarLocalStorage() {
-        const data = { general: getGeneralData(), containers: listaContainers };
-        localStorage.setItem('draft_expeditors_cache', JSON.stringify(data));
-    }
-
-    function carregarLocalStorage() {
-        // Recupera o tema salvo
-        const savedTheme = localStorage.getItem('draft_theme_exp');
-        if (savedTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.getElementById('themeIcon').innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.getElementById('themeIcon').innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+            document.getElementById('reviewData').innerHTML = html;
+            document.getElementById('reviewModal').classList.add('show');
         }
 
-        const saved = localStorage.getItem('draft_expeditors_cache');
-        if (saved) {
-            try {
-                const data = JSON.parse(saved);
-                if (data.general) {
-                    const map = {
-                        bl: 'f1_bl', shipper: 'f2_shipper', consignee: 'f3_consignee', notify: 'f4_notify',
-                        vessel: 'f5_vessel', pol: 'f6_pol', pod: 'f7_pod', delivery: 'f8_delivery',
-                        ncm: 'f9_ncm', due: 'f10_due', ruc: 'f11_ruc', marks: 'f12_marks',
-                        desc: 'f13_desc', freight: 'f14_freight', wood: 'f15_wood', imo: 'f16_imo', comments: 'f16_comments'
-                    };
-                    Object.keys(data.general).forEach(key => {
-                        const el = document.getElementById(map[key]);
-                        if (el) el.value = data.general[key];
+        function fecharModal() { 
+            document.getElementById('reviewModal').classList.remove('show'); 
+        }
+
+        // =========================================================================
+        // EXPORTAÇÃO EXCEL (.XLS)
+        // =========================================================================
+        function gerarEEnviarExcel() {
+            const btn = document.querySelector('button[onclick="gerarEEnviarExcel()"]');
+            if (btn && btn.getAttribute('data-status') === 'pronto') {
+                const g = getGeneralData();
+                const emailTo = "operacao.oxp@expeditors.com";
+                const subject = encodeURIComponent(`Draft OXP - ${g.shipper.split('\n')[0]}`);
+                const body = encodeURIComponent(`Aqui está o Draft do pedido OXP!\n\nNavio: ${g.vessel}\nPOL: ${g.pol} / POD: ${g.pod}\n\n(Anexe a planilha XLS baixada antes de enviar)`);
+                window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+                btn.removeAttribute('data-status'); 
+                btn.innerHTML = `Enviar Ordem`; 
+                btn.style.background = ''; 
+                fecharModal(); 
+                return;
+            }
+
+            const g = getGeneralData();
+            let tabelaHTML = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="utf-8"></head>
+                <body>
+                <table border="1" style="font-family: Arial; font-size: 11px; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #0f172a; color: #ffffff; font-weight: bold; text-align: center;">
+                            <th>BL ISSUANCE</th><th>FREIGHT TERMS</th><th>SERVICE</th>
+                            <th>RECEIPT</th><th>POL</th><th>TRANSSHIPMENT</th><th>POD</th><th>DELIVERY</th>
+                            <th>VESSEL</th><th>VOYAGE</th><th>ETD</th><th>ETA</th><th>CUTOFF</th>
+                            <th>SHIPPER</th><th>CONSIGNEE</th><th>NOTIFY</th>
+                            <th>DESCRIPTION</th><th>MARKS</th><th>NCM</th><th>RUC</th><th>WOOD DECL.</th><th style="background-color:#f59e0b;">IMO</th><th>COMMENTS</th>
+                            <th style="background-color:#10b981;">INVOICE NO</th><th style="background-color:#10b981;">INV DATE</th><th style="background-color:#10b981;">PACKING LIST</th><th style="background-color:#10b981;">RE/DU-E</th>
+                            <th style="background-color:#10b981;">CERT ORIGIN</th><th style="background-color:#10b981;">CO NUMBER</th><th style="background-color:#10b981;">LC</th><th style="background-color:#10b981;">ISSUING BANK</th><th style="background-color:#10b981;">DOCS TO SEND</th>
+                            <th style="background-color:#3b82f6;">SPEC INSTR</th><th style="background-color:#3b82f6;">CONTACT NAME</th><th style="background-color:#3b82f6;">EMAIL</th><th style="background-color:#3b82f6;">PHONE</th><th style="background-color:#3b82f6;">COMPANY</th><th style="background-color:#3b82f6;">APPROVAL DL</th>
+                            <th style="background-color:#ef4444;">CONT. NUMBER</th><th style="background-color:#ef4444;">SEAL</th><th style="background-color:#ef4444;">TYPE</th><th style="background-color:#ef4444;">TARE</th>
+                            <th style="background-color:#ef4444;">QTY</th><th style="background-color:#ef4444;">PKG TYPE</th><th style="background-color:#ef4444;">GROSS WT</th><th style="background-color:#ef4444;">NET WT</th><th style="background-color:#ef4444;">CBM</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                    
+            const commonTDs = `
+                <td>${g.bl}</td><td>${g.freight}</td><td>${g.service}</td>
+                <td>${g.receipt}</td><td>${g.pol}</td><td>${g.transship}</td><td>${g.pod}</td><td>${g.delivery}</td>
+                <td>${g.vessel}</td><td>${g.voyage}</td><td>${g.etd}</td><td>${g.eta}</td><td>${g.cutoff}</td>
+                <td>${g.shipper.replace(/\n/g, '<br>')}</td><td>${g.consignee.replace(/\n/g, '<br>')}</td><td>${g.notify.replace(/\n/g, '<br>')}</td>
+                <td>${g.desc}</td><td>${g.marks.replace(/\n/g, '<br>')}</td><td>${g.ncm}</td><td>${g.ruc}</td><td>${g.wood}</td><td style="font-weight:bold; color:${g.imo === 'Sim' ? 'red' : 'black'};">${g.imo}</td><td>${g.comments.replace(/\n/g, '<br>')}</td>
+                <td>${g.inv_num}</td><td>${g.inv_date}</td><td>${g.pack_list}</td><td>${g.due}</td>
+                <td>${g.cert_origin}</td><td>${g.co_num}</td><td>${g.lc}</td><td>${g.lc_bank}</td><td>${g.docs_dest}</td>
+                <td>${g.spec_instr.replace(/\n/g, '<br>')}</td><td>${g.contact_name}</td><td>${g.contact_email}</td><td>${g.contact_phone}</td><td>${g.contact_company}</td><td>${g.approval}</td>
+            `;
+
+            if (currentMode === 'LCL') {
+                const l = getLCLData();
+                tabelaHTML += `<tr style="text-align: center; vertical-align: middle;">${commonTDs}<td style="font-weight:bold; color: #f59e0b;">LCL CARGO</td><td>-</td><td>LCL</td><td>0</td><td>${l.qty}</td><td>${l.pkg}</td><td>${l.gross}</td><td>${l.net || ''}</td><td>${l.cbm || ''}</td></tr>`;
+            } else {
+                listaContainers.forEach(cnt => {
+                    tabelaHTML += `<tr style="text-align: center; vertical-align: middle;">${commonTDs}<td style="font-weight:bold;">${cnt.num}</td><td>${cnt.lacre}</td><td>${cnt.type}</td><td>${cnt.tare}</td><td>${cnt.qty}</td><td>${cnt.pkg}</td><td>${cnt.gross}</td><td>${cnt.net || ''}</td><td>${cnt.cbm || ''}</td></tr>`;
+                });
+            }
+            
+            tabelaHTML += `</tbody></table></body></html>`;
+
+            const blob = new Blob([tabelaHTML], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = `BookingDraft_${g.vessel.replace(/[^a-z0-9]/gi, '_')}.xls`;
+            
+            document.body.appendChild(a); 
+            a.click(); 
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+            if (btn) {
+                btn.setAttribute('data-status', 'pronto');
+                btn.innerHTML = `Abrir E-mail <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`;
+                btn.style.background = '#10b981'; 
+            }
+        }
+
+        // =========================================================================
+        // IMPORTAR/EXPORTAR & LOCAL STORAGE
+        // =========================================================================
+        function salvarRascunho() {
+            const payload = JSON.stringify({ general: getGeneralData(), containers: listaContainers, lcl: getLCLData() }, null, 2);
+            const blob = new Blob([payload], { type: "application/json" });
+            const a = document.createElement('a'); 
+            a.href = URL.createObjectURL(blob); 
+            a.download = "rascunho_instrucao.json"; 
+            a.click();
+        }
+        
+        document.getElementById('importFile').addEventListener('change', function(e) {
+            const file = e.target.files[0]; 
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try { 
+                    restoreState(JSON.parse(e.target.result)); 
+                    alert("Rascunho carregado com sucesso!"); 
+                } catch(err) { 
+                    alert("Erro ao carregar rascunho. Arquivo inválido."); 
+                }
+            }; 
+            reader.readAsText(file);
+        });
+
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const newTheme = htmlEl.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            htmlEl.setAttribute('data-theme', newTheme); 
+            localStorage.setItem('draft_theme_exp', newTheme);
+            
+            const icon = document.getElementById('themeIcon');
+            if (newTheme === 'light') {
+                icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+            } else {
+                icon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+            }
+        }
+
+        function salvarLocalStorage() {
+            localStorage.setItem('draft_expeditors_cache', JSON.stringify({ 
+                general: getGeneralData(), 
+                containers: listaContainers, 
+                lcl: getLCLData() 
+            }));
+        }
+
+        function carregarLocalStorage() {
+            if (localStorage.getItem('draft_theme_exp') === 'light') { 
+                document.documentElement.setAttribute('data-theme', 'light'); 
+                document.getElementById('themeIcon').innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`; 
+            }
+            const saved = localStorage.getItem('draft_expeditors_cache');
+            if (saved) {
+                try { 
+                    restoreState(JSON.parse(saved)); 
+                } catch (err) { 
+                    console.error(err); 
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', carregarLocalStorage);
+        document.getElementById('draftForm').addEventListener('input', salvarLocalStorage);
+        document.getElementById('draftForm').addEventListener('change', salvarLocalStorage);
+
+        // =========================================================================
+        // RESTORE STATE & UNDO/REDO (MÁQUINA DO TEMPO)
+        // =========================================================================
+        let historyStack = [], redoStack = [], isUndoing = false;
+
+        function saveStateToHistory() {
+            if (isUndoing) return; 
+            const currentState = JSON.stringify({ general: getGeneralData(), containers: listaContainers, lcl: getLCLData() });
+            if (historyStack.length === 0 || historyStack[historyStack.length - 1] !== currentState) {
+                historyStack.push(currentState); 
+                redoStack = []; 
+                if (historyStack.length > 50) historyStack.shift(); 
+            }
+        }
+
+        const originalSalvarLocalStorage = salvarLocalStorage;
+        salvarLocalStorage = function() { 
+            originalSalvarLocalStorage(); 
+            saveStateToHistory(); 
+        };
+
+        function undoAction() {
+            if (historyStack.length <= 1) return; 
+            isUndoing = true; 
+            redoStack.push(historyStack.pop()); 
+            restoreState(JSON.parse(historyStack[historyStack.length - 1])); 
+            isUndoing = false;
+        }
+
+        function redoAction() {
+            if (redoStack.length === 0) return; 
+            isUndoing = true; 
+            const nextStateStr = redoStack.pop();
+            historyStack.push(nextStateStr); 
+            restoreState(JSON.parse(nextStateStr)); 
+            isUndoing = false;
+        }
+
+        function restoreState(state) {
+            if (state.general) {
+                const map = { 
+                    bl: 'g_bl', freight: 'g_freight', service: 'g_service', receipt: 'g_receipt', 
+                    pol: 'g_pol', transship: 'g_transship', pod: 'g_pod', delivery: 'g_delivery', 
+                    vessel: 'g_vessel', voyage: 'g_voyage', etd: 'g_etd', eta: 'g_eta', 
+                    cutoff: 'g_cutoff', shipper: 'g_shipper', consignee: 'g_consignee', 
+                    notify: 'g_notify', desc: 'g_desc', marks: 'g_marks', ncm: 'g_ncm', 
+                    ruc: 'g_ruc', wood: 'g_wood', imo: 'g_imo', comments: 'g_comments', 
+                    inv_num: 'g_inv_num', inv_date: 'g_inv_date', pack_list: 'g_pack_list', 
+                    due: 'g_due', cert_origin: 'g_cert_origin', co_num: 'g_co_num', 
+                    lc: 'g_lc', lc_bank: 'g_lc_bank', spec_instr: 'g_spec_instr', 
+                    contact_name: 'g_contact_name', contact_email: 'g_contact_email', 
+                    contact_phone: 'g_contact_phone', contact_company: 'g_contact_company', 
+                    approval: 'g_approval' 
+                };
+                Object.keys(map).forEach(key => { 
+                    const el = document.getElementById(map[key]); 
+                    if (el && state.general[key]) el.value = state.general[key]; 
+                });
+                
+                // Checkboxes
+                document.querySelectorAll('input[name="docs_dest"]').forEach(cb => cb.checked = false);
+                if (state.general.docs_dest) {
+                    const docs = state.general.docs_dest.split(', ');
+                    docs.forEach(val => { 
+                        const cb = document.querySelector(`input[name="docs_dest"][value="${val}"]`); 
+                        if (cb) cb.checked = true; 
                     });
                 }
-                if (data.containers) {
-                    listaContainers = data.containers;
-                    atualizarListaUI();
-                }
-            } catch (err) { console.error("Erro ao carregar o cache local", err); }
+                toggleDGBlock();
+            }
+            if (state.containers) { 
+                listaContainers = [...state.containers]; 
+                atualizarListaUI(); 
+            }
+            if (state.lcl) {
+                setMode(state.lcl.mode || 'FCL');
+                ['lcl_qty', 'lcl_pkg', 'lcl_cbm', 'lcl_gross', 'lcl_net'].forEach(id => {
+                    if (state.lcl[id.split('_')[1]]) {
+                        document.getElementById(id).value = state.lcl[id.split('_')[1]];
+                    }
+                });
+                calcLCL();
+            }
+            originalSalvarLocalStorage(); 
         }
-    }
 
-    // Inicia o carregamento quando a página abre
-    window.addEventListener('DOMContentLoaded', carregarLocalStorage);
-
-    // Salva automaticamente toda vez que o usuário digita ou muda um input geral
-    document.getElementById('draftForm').addEventListener('input', salvarLocalStorage);
-    document.getElementById('draftForm').addEventListener('change', salvarLocalStorage);
-
-    // =========================================================================
-    // MÁQUINA DO TEMPO: UNDO / REDO (Ctrl+Z / Ctrl+Y)
-    // =========================================================================
-    let historyStack = [];
-    let redoStack = [];
-    let isUndoing = false;
-
-    // Função para salvar o estado (tira uma "foto" dos dados atuais)
-    function saveStateToHistory() {
-        if (isUndoing) return; 
-        const currentState = JSON.stringify({ general: getGeneralData(), containers: listaContainers });
+        document.addEventListener('keydown', function(e) {
+            const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+            if (e.ctrlKey && e.key.toLowerCase() === 'z' && !e.shiftKey) { 
+                if (!isTyping) { e.preventDefault(); undoAction(); } 
+            }
+            if ((e.ctrlKey && e.key.toLowerCase() === 'y') || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'z')) { 
+                if (!isTyping) { e.preventDefault(); redoAction(); } 
+            }
+        });
         
-        // Só salva se houver mudanças reais (evita histórico repetido)
-        if (historyStack.length === 0 || historyStack[historyStack.length - 1] !== currentState) {
-            historyStack.push(currentState);
-            redoStack = []; // Se fez uma ação nova, zera o futuro (redo)
-            if (historyStack.length > 50) historyStack.shift(); // Limita a 50 ações para não pesar a memória
-        }
-    }
-
-    // MÁGICA: Intercepta a função original de salvar no LocalStorage para injetar o histórico!
-    const originalSalvarLocalStorage = salvarLocalStorage;
-    salvarLocalStorage = function() {
-        originalSalvarLocalStorage();
-        saveStateToHistory();
-    };
-
-    // Função de Desfazer (Undo)
-    function undoAction() {
-        if (historyStack.length <= 1) return; // Não tem mais o que desfazer
-        isUndoing = true;
-        redoStack.push(historyStack.pop()); // Tira do passado e joga pro futuro
-        const previousState = JSON.parse(historyStack[historyStack.length - 1]);
-        restoreState(previousState);
-        isUndoing = false;
-    }
-
-    // Função de Refazer (Redo)
-    function redoAction() {
-        if (redoStack.length === 0) return; // Não tem futuro salvo
-        isUndoing = true;
-        const nextStateStr = redoStack.pop();
-        historyStack.push(nextStateStr); // Tira do futuro e joga pro passado
-        restoreState(JSON.parse(nextStateStr));
-        isUndoing = false;
-    }
-
-    // Pega a "foto" salva e repinta a tela inteira
-    function restoreState(state) {
-        if (state.general) {
-            const map = { bl: 'f1_bl', shipper: 'f2_shipper', consignee: 'f3_consignee', notify: 'f4_notify', vessel: 'f5_vessel', pol: 'f6_pol', pod: 'f7_pod', delivery: 'f8_delivery', ncm: 'f9_ncm', due: 'f10_due', ruc: 'f11_ruc', marks: 'f12_marks', desc: 'f13_desc', freight: 'f14_freight', wood: 'f15_wood', comments: 'f16_comments' };
-            Object.keys(state.general).forEach(key => {
-                const el = document.getElementById(map[key]);
-                if (el) el.value = state.general[key];
-            });
-        }
-        if (state.containers) {
-            listaContainers = [...state.containers]; // Clona o array do passado
-            atualizarListaUI();
-        }
-        originalSalvarLocalStorage(); // Salva esse estado restaurado no cache do navegador
-    }
-
-    // OUVINTE DE ATALHOS DO TECLADO
-    document.addEventListener('keydown', function(e) {
-        // Bloqueia o atalho se o usuário estiver digitando dentro de um <input> ou <textarea>
-        // Deixamos o navegador lidar com o Ctrl+Z natural de textos. Nosso Ctrl+Z vai atuar no nível da página (containers apagados, reset, etc).
-        const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
-        
-        // Ctrl + Z (Desfazer)
-        if (e.ctrlKey && e.key.toLowerCase() === 'z' && !e.shiftKey) {
-            if(!isTyping) { e.preventDefault(); undoAction(); }
-        }
-        // Ctrl + Y ou Ctrl + Shift + Z (Refazer)
-        if ((e.ctrlKey && e.key.toLowerCase() === 'y') || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'z')) {
-            if(!isTyping) { e.preventDefault(); redoAction(); }
-        }
-    });
-
-    // Tira a primeira "foto" assim que o sistema inicia
-    setTimeout(saveStateToHistory, 500);
-
-</script>
+        setTimeout(saveStateToHistory, 500);
+    </script>
 </body>
+
 </html>
