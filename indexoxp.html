@@ -130,11 +130,11 @@
     }
 
     .theme-toggle {
-        position: absolute;
-        top: 5px;
-        right: 0;
-        width: 45px;
-        height: 45px;
+        position: fixed; /* Garante que ele fique flutuando */
+        top: 30px;       /* Distância do topo */
+        right: 30px;     /* Distância da direita */
+        width: 50px;
+        height: 50px;
         padding: 0;
         border-radius: 50%;
         background: var(--surface-panel);
@@ -145,28 +145,35 @@
         justify-content: center;
         cursor: pointer;
         transition: var(--transition);
+        z-index: 9999; /* Garante que fique por cima de tudo */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 
     .theme-toggle:hover {
         background: var(--border-light);
-        transform: scale(1.05);
-    }
-
-    .mobile-menu-btn {
-        display: none;
-        background: transparent;
-        border: none;
-        color: var(--text-main);
-        cursor: pointer;
-        padding: 5px;
-        position: absolute;
-        left: 0;
-        top: 10px;
-        transition: var(--transition);
-    }
-
-    .mobile-menu-btn:hover {
+        transform: scale(1.1) translateY(3px); /* Efeito visual suave */
         color: var(--primary);
+    }
+
+    .mobile-menu-btn { 
+        display: none; 
+        background: transparent; 
+        border: none; 
+        color: var(--text-main); 
+        cursor: pointer; 
+        padding: 5px; 
+        position: absolute; 
+        left: 0; 
+        top: 50%; /* Joga o botão para o meio */
+        transform: translateY(-50%); /* Centraliza perfeitamente no eixo Y */
+        transition: var(--transition); 
+        z-index: 10;
+    }
+
+    .mobile-menu-btn:hover { 
+        color: var(--primary); 
     }
 
     /* ==========================================================================
@@ -846,12 +853,10 @@
         }
 
         .theme-toggle {
-            position: absolute;
-            top: 5px;
-            right: 0;
+            top: 15px;   /* Mais colado no topo no mobile */
+            right: 15px; /* Mais colado na direita no mobile */
             width: 40px;
             height: 40px;
-            flex-shrink: 0;
         }
 
         .brand-logo {
@@ -1392,41 +1397,90 @@
         </div>
 
         <div id="page-help" class="page-view">
-            <div class="section-header"><div class="section-title">Portal Usage Guide</div></div>
-            
-            <div class="container-form-panel" style="margin-bottom: 20px;">
-                <h3 style="color: var(--primary); margin-top: 0;">How to use this portal</h3>
-                <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; padding-left: 20px;">
-                    <li><strong>Load a template</strong> (optional) to auto-fill recurring data such as Shipper and Consignee.</li>
-                    <li><strong>Fill in all mandatory fields</strong> marked with *.</li>
-                    <li><strong>Select shipment type:</strong> FCL (declare each container) or LCL (declare totals only — gross, net, CBM, quantity).</li>
-                    <li><strong>Describe the cargo</strong> in UPPERCASE in section 5, as per standard BL format.</li>
-                    <li><strong>Save Draft</strong> at any time to avoid losing data.</li>
-                    <li><strong>Click Continue</strong> to see a full preview of all answers before submitting.</li>
-                    <li><strong>Click Submit</strong> in the preview: the system generates a CSV, opens your email client pre-filled, and saves a PDF to your machine.</li>
-                </ul>
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="section-title" id="help-title" style="margin: 0;">Portal Usage Guide</div>
+                <button type="button" onclick="toggleTranslation()" id="btn-translate" class="btn-danger-ghost" style="width: auto; margin-top: 0; height: auto;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    Traduzir PT-BR
+                </button>
             </div>
             
-            <div class="container-form-panel" style="margin-bottom: 20px;">
-                <h3 style="color: var(--primary); margin-top: 0;">FCL vs LCL</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
-                    <strong>FCL (Full Container Load):</strong> The entire container is used by one shipper. Declare each container number, seal, type, packages, weight and CBM.<br><br>
-                    <strong>LCL (Less Container Load):</strong> Cargo shares a container with other shipments. Declare only totals: quantity, packing type, gross weight, net weight and CBM. No container numbers required.
-                </p>
+            <div id="help-en">
+                <div class="container-form-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin-top: 0;">How to use this portal</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; padding-left: 20px;">
+                        <li><strong>Load a template</strong> (optional) to auto-fill recurring data such as Shipper and Consignee.</li>
+                        <li><strong>Fill in all mandatory fields</strong> marked with *.</li>
+                        <li><strong>Select shipment type:</strong> FCL (declare each container) or LCL (declare totals only — gross, net, CBM, quantity).</li>
+                        <li><strong>Describe the cargo</strong> in UPPERCASE in section 5, as per standard BL format.</li>
+                        <li><strong>Save Draft</strong> at any time to avoid losing data.</li>
+                        <li><strong>Click Continue</strong> to see a full preview of all answers before submitting.</li>
+                        <li><strong>Click Submit</strong> in the preview: the system generates a CSV, opens your email client pre-filled, and saves a PDF to your machine.</li>
+                    </ul>
+                </div>
+                
+                <div class="container-form-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin-top: 0;">📦 FCL vs LCL</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        <strong>FCL (Full Container Load):</strong> The entire container is used by one shipper. Declare each container number, seal, type, packages, weight and CBM.<br><br>
+                        <strong>LCL (Less Container Load):</strong> Cargo shares a container with other shipments. Declare only totals: quantity, packing type, gross weight, net weight and CBM. No container numbers required.
+                    </p>
+                </div>
+
+                <div class="container-form-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin-top: 0;">⚖️ VGM</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        Check "Submit VGM" to declare the Verified Gross Mass. Fill in VGM (kg), weighing method (Method 1 = weigh loaded container; Method 2 = sum cargo + packing + container tare), company name, authorized signatory and weighing date.
+                    </p>
+                </div>
+
+                <div class="container-form-panel">
+                    <h3 style="color: var(--primary); margin-top: 0;">📤 CSV Submission</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        When you confirm submission, the portal generates a <strong>.csv</strong> file and your email client opens automatically addressed to <strong>arthur.jacob@expeditors.com</strong> with subject <em>"Instrução de BL - [House]"</em>. Attach the CSV and send. A PDF summary is also saved locally.
+                    </p>
+                </div>
             </div>
 
-            <div class="container-form-panel" style="margin-bottom: 20px;">
-                <h3 style="color: var(--primary); margin-top: 0;">VGM</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
-                    Check "Submit VGM" to declare the Verified Gross Mass. Fill in VGM (kg), weighing method (Method 1 = weigh loaded container; Method 2 = sum cargo + packing + container tare), company name, authorized signatory and weighing date.
-                </p>
-            </div>
+            <div id="help-pt" style="display: none;">
+                <div class="container-form-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin-top: 0;">Como usar este portal</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; padding-left: 20px;">
+                        <li><strong>Carregue um template</strong> (opcional) para autocompletar dados recorrentes como Shipper e Consignee.</li>
+                        <li><strong>Preencha todos os campos obrigatórios</strong> marcados com *.</li>
+                        <li><strong>Selecione o tipo de embarque:</strong> FCL (declare cada container) ou LCL (declare apenas os totais — bruto, líquido, CBM, quantidade).</li>
+                        <li><strong>Descreva a carga</strong> em MAIÚSCULAS na seção de mercadorias, conforme padrão BL.</li>
+                        <li><strong>Salve o Rascunho</strong> a qualquer momento para não perder dados.</li>
+                        <li><strong>Clique em Revisar</strong> para ver uma prévia de todas as respostas antes do envio.</li>
+                        <li><strong>Clique em Enviar Ordem</strong> na prévia: o sistema gera um arquivo XLS, abre seu e-mail preenchido e salva um PDF na sua máquina.</li>
+                    </ul>
+                </div>
+                
+                <div class="container-form-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin-top: 0;">📦 FCL vs LCL</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        <strong>FCL (Full Container Load):</strong> O container inteiro é utilizado por um único embarcador. Declare o número de cada container, lacre, tipo, volumes, peso e CBM.<br><br>
+                        <strong>LCL (Less Container Load):</strong> A carga divide o espaço com outros embarques. Declare apenas os totais: quantidade, tipo de embalagem, peso bruto, peso líquido e CBM. Não exige número de container.
+                    </p>
+                </div>
 
-            <div class="container-form-panel">
-                <h3 style="color: var(--primary); margin-top: 0;">CSV Submission</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
-                    When you confirm submission, the portal generates a <strong>.csv</strong> file and your email client opens automatically addressed to <strong>arthur.jacob@expeditors.com</strong> with subject <em>"Instrução de BL - [House]"</em>. Attach the CSV and send. A PDF summary is also saved locally.
-                </p>
+                <div class="container-form-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary); margin-top: 0;">⚖️ VGM</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        Marque "Submit VGM" para declarar a Massa Bruta Verificada. Preencha o VGM (kg), método de pesagem (Método 1 = pesar o container cheio; Método 2 = somar carga + embalagem + tara do container), nome da empresa, signatário e data.
+                    </p>
+                </div>
+
+                <div class="container-form-panel">
+                    <h3 style="color: var(--primary); margin-top: 0;">📤 Envio de Documentos</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        Ao confirmar, o portal gera um arquivo <strong>.xls</strong> e abre seu cliente de e-mail automaticamente endereçado para a Expeditors. Anexe o XLS e o PDF gerados para enviar a instrução de BL oficial.
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -1773,158 +1827,308 @@
             calcFCLTotals(); 
         }
 
-        function abrirModal() {
-            const g = getGeneralData();
-            
-            if (!g.bl || !g.pol || !g.pod || !g.vessel || !g.voyage || !g.shipper || !g.consignee || !g.notify || !g.desc || !g.ncm || !g.inv_num || !g.contact_name || !g.contact_email) {
-                alert("Preencha todos os campos obrigatórios (marcados com *) em todas as seções antes de revisar."); 
+        // =========================================================================
+    // SUBSTITUA A FUNÇÃO abrirModal() POR ESTA (COM VALIDAÇÕES CRÍTICAS)
+    // =========================================================================
+    function abrirModal() {
+        const g = getGeneralData();
+        
+        // 1. Checagem de obrigatoriedade geral expandida
+        if(!g.bl || !g.pol || !g.pod || !g.vessel || !g.voyage || !g.shipper || !g.consignee || !g.notify || !g.desc || !g.ncm || !g.inv_num || !g.contact_name || !g.contact_email) {
+            alert("Preencha todos os campos obrigatórios (marcados com *) em todas as seções antes de revisar."); 
+            return;
+        }
+
+        // 2. Trava de Segurança para Carga Perigosa (IMO)
+        if (g.imo === 'Sim') {
+            const un = document.getElementById('dg_un').value;
+            const cls = document.getElementById('dg_class').value;
+            if(!un || !cls) {
+                alert("ATENÇÃO: Você informou que é Carga Perigosa (IMO). É obrigatório preencher o 'UN Number' e 'IMO Class' na Seção 3.");
                 return;
             }
-
-            let html = `
-                <div class="review-card">
-                    <div class="review-card-title">ROUTING & VESSEL</div>
-                    <div class="review-data-grid" style="margin-bottom: 20px;">
-                        <div><span class="review-label">Vessel/Voy:</span> <span class="review-value">${g.vessel} / ${g.voyage}</span></div>
-                        <div><span class="review-label">POL:</span> <span class="review-value">${g.pol}</span></div>
-                        <div><span class="review-label">POD:</span> <span class="review-value">${g.pod}</span></div>
-                        <div><span class="review-label">ETD / ETA:</span> <span class="review-value">${g.etd || '-'} / ${g.eta || '-'}</span></div>
-                    </div>
-                    
-                    <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px; margin-bottom: 20px;">
-                        <div><span class="review-label">Shipper:</span> <span class="review-value">${g.shipper.replace(/\n/g, '<br>')}</span></div>
-                        <div><span class="review-label">Consignee:</span> <span class="review-value">${g.consignee.replace(/\n/g, '<br>')}</span></div>
-                    </div>
-
-                    <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px;">
-                        <div><span class="review-label">Invoice Number:</span> <span class="review-value">${g.inv_num}</span></div>
-                        <div><span class="review-label">RE / DU-E:</span> <span class="review-value">${g.due || '-'}</span></div>
-                        <div><span class="review-label">Contact Name:</span> <span class="review-value">${g.contact_name} (${g.contact_email})</span></div>
-                        <div><span class="review-label">Dangerous Goods:</span> <span class="review-value" style="color: ${g.imo === 'Sim' ? 'var(--danger)' : 'inherit'};">${g.imo}</span></div>
-                    </div>
-                </div>
-            `;
-
-            if (currentMode === 'FCL') {
-                if (listaContainers.length === 0) { 
-                    alert("Adicione pelo menos 1 Container."); 
-                    return; 
-                }
-                html += `<div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin: 30px 0 15px;">CONTAINERS ADICIONADOS (${listaContainers.length})</div>`;
-                listaContainers.forEach((cnt, i) => {
-                    html += `
-                    <div class="review-card">
-                        <div class="review-card-title" style="color: var(--primary);">
-                            <span>Container #${i+1} | ${cnt.num}</span><span style="color: var(--text-muted); font-size: 0.9rem;">${cnt.type}</span>
-                        </div>
-                        <div class="review-data-grid">
-                            <div><span class="review-label">Quantidade:</span> <span class="review-value">${cnt.qty}x ${cnt.pkg}</span></div>
-                            <div><span class="review-label">Gross Weight:</span> <span class="review-value">${cnt.gross} kg</span></div>
-                            <div><span class="review-label">CBM:</span> <span class="review-value">${cnt.cbm || '-'} m³</span></div>
-                            <div><span class="review-label">Lacre (Seal):</span> <span class="review-value">${cnt.lacre}</span></div>
-                        </div>
-                    </div>`;
-                });
-            } else {
-                const lcl = getLCLData();
-                html += `
-                    <div style="font-weight: 700; color: var(--warning); font-size: 1.05rem; margin: 30px 0 15px;">CARGA SOLTA (LCL)</div>
-                    <div class="review-card" style="border-left-color: var(--warning);">
-                        <div class="review-data-grid">
-                            <div><span class="review-label">Quantidade:</span> <span class="review-value">${lcl.qty}x ${lcl.pkg}</span></div>
-                            <div><span class="review-label">Gross Weight:</span> <span class="review-value">${lcl.gross} kg</span></div>
-                            <div><span class="review-label">Volume (CBM):</span> <span class="review-value">${lcl.cbm} m³</span></div>
-                        </div>
-                    </div>`;
-            }
-
-            document.getElementById('reviewData').innerHTML = html;
-            document.getElementById('reviewModal').classList.add('show');
         }
+
+        let html = `
+            <div class="review-card">
+                <div class="review-card-title">ROUTING & VESSEL</div>
+                <div class="review-data-grid" style="margin-bottom: 20px;">
+                    <div><span class="review-label">Vessel/Voy:</span> <span class="review-value">${g.vessel} / ${g.voyage}</span></div>
+                    <div><span class="review-label">POL:</span> <span class="review-value">${g.pol}</span></div>
+                    <div><span class="review-label">POD:</span> <span class="review-value">${g.pod}</span></div>
+                    <div><span class="review-label">ETD / ETA:</span> <span class="review-value">${g.etd || '-'} / ${g.eta || '-'}</span></div>
+                </div>
+                
+                <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px; margin-bottom: 20px;">
+                    <div><span class="review-label">Shipper:</span> <span class="review-value">${g.shipper.replace(/\n/g, '<br>')}</span></div>
+                    <div><span class="review-label">Consignee:</span> <span class="review-value">${g.consignee.replace(/\n/g, '<br>')}</span></div>
+                </div>
+
+                <div class="review-data-grid" style="border-top: 1px dashed var(--border-light); padding-top: 20px;">
+                    <div><span class="review-label">Invoice Number:</span> <span class="review-value">${g.inv_num}</span></div>
+                    <div><span class="review-label">RE / DU-E:</span> <span class="review-value">${g.due || '-'}</span></div>
+                    <div><span class="review-label">Contact Name:</span> <span class="review-value">${g.contact_name} (${g.contact_email})</span></div>
+                    <div><span class="review-label">Dangerous Goods:</span> <span class="review-value" style="color: ${g.imo === 'Sim' ? 'var(--danger)' : 'inherit'}; font-weight: 800;">${g.imo}</span></div>
+                </div>
+            </div>
+        `;
+
+        // 3. Trava de Segurança para os Modos de Carga
+        if (currentMode === 'FCL') {
+            if (listaContainers.length === 0) { 
+                alert("Modo FCL selecionado: Adicione pelo menos 1 Container na Seção 5."); 
+                return; 
+            }
+            html += `<div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; margin: 30px 0 15px;">CONTAINERS ADICIONADOS (${listaContainers.length})</div>`;
+            listaContainers.forEach((cnt, i) => {
+                html += `
+                <div class="review-card">
+                    <div class="review-card-title" style="color: var(--primary);">
+                        <span>Container #${i+1} | ${cnt.num}</span><span style="color: var(--text-muted); font-size: 0.9rem;">${cnt.type}</span>
+                    </div>
+                    <div class="review-data-grid">
+                        <div><span class="review-label">Quantidade:</span> <span class="review-value">${cnt.qty}x ${cnt.pkg}</span></div>
+                        <div><span class="review-label">Gross Weight:</span> <span class="review-value">${cnt.gross} kg</span></div>
+                        <div><span class="review-label">CBM:</span> <span class="review-value">${cnt.cbm || '-'} m³</span></div>
+                        <div><span class="review-label">Lacre (Seal):</span> <span class="review-value">${cnt.lacre}</span></div>
+                    </div>
+                </div>`;
+            });
+        } else {
+            const lcl = getLCLData();
+            if (!lcl.qty || !lcl.pkg || !lcl.cbm || !lcl.gross) {
+                alert("Modo LCL selecionado: Preencha todos os totais (Quantidade, CBM, Gross Weight) na Seção 5.");
+                return;
+            }
+            html += `
+                <div style="font-weight: 700; color: var(--warning); font-size: 1.05rem; margin: 30px 0 15px;">CARGA SOLTA (LCL)</div>
+                <div class="review-card" style="border-left-color: var(--warning);">
+                    <div class="review-data-grid">
+                        <div><span class="review-label">Quantidade:</span> <span class="review-value">${lcl.qty}x ${lcl.pkg}</span></div>
+                        <div><span class="review-label">Gross Weight:</span> <span class="review-value">${lcl.gross} kg</span></div>
+                        <div><span class="review-label">Volume (CBM):</span> <span class="review-value">${lcl.cbm} m³</span></div>
+                    </div>
+                </div>`;
+        }
+
+        document.getElementById('reviewData').innerHTML = html;
+        document.getElementById('reviewModal').classList.add('show');
+    }
 
         function fecharModal() { 
             document.getElementById('reviewModal').classList.remove('show'); 
         }
 
         // =========================================================================
-        // EXPORTAÇÃO EXCEL (.XLS)
-        // =========================================================================
-        function gerarEEnviarExcel() {
-            const btn = document.querySelector('button[onclick="gerarEEnviarExcel()"]');
-            if (btn && btn.getAttribute('data-status') === 'pronto') {
-                const g = getGeneralData();
-                const emailTo = "operacao.oxp@expeditors.com";
-                const subject = encodeURIComponent(`Draft OXP - ${g.shipper.split('\n')[0]}`);
-                const body = encodeURIComponent(`Aqui está o Draft do pedido OXP!\n\nNavio: ${g.vessel}\nPOL: ${g.pol} / POD: ${g.pod}\n\n(Anexe a planilha XLS baixada antes de enviar)`);
-                window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
-                btn.removeAttribute('data-status'); 
-                btn.innerHTML = `Enviar Ordem`; 
-                btn.style.background = ''; 
-                fecharModal(); 
-                return;
-            }
-
-            const g = getGeneralData();
-            let tabelaHTML = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-                <head><meta charset="utf-8"></head>
-                <body>
-                <table border="1" style="font-family: Arial; font-size: 11px; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background-color: #0f172a; color: #ffffff; font-weight: bold; text-align: center;">
-                            <th>BL ISSUANCE</th><th>FREIGHT TERMS</th><th>SERVICE</th>
-                            <th>RECEIPT</th><th>POL</th><th>TRANSSHIPMENT</th><th>POD</th><th>DELIVERY</th>
-                            <th>VESSEL</th><th>VOYAGE</th><th>ETD</th><th>ETA</th><th>CUTOFF</th>
-                            <th>SHIPPER</th><th>CONSIGNEE</th><th>NOTIFY</th>
-                            <th>DESCRIPTION</th><th>MARKS</th><th>NCM</th><th>RUC</th><th>WOOD DECL.</th><th style="background-color:#f59e0b;">IMO</th><th>COMMENTS</th>
-                            <th style="background-color:#10b981;">INVOICE NO</th><th style="background-color:#10b981;">INV DATE</th><th style="background-color:#10b981;">PACKING LIST</th><th style="background-color:#10b981;">RE/DU-E</th>
-                            <th style="background-color:#10b981;">CERT ORIGIN</th><th style="background-color:#10b981;">CO NUMBER</th><th style="background-color:#10b981;">LC</th><th style="background-color:#10b981;">ISSUING BANK</th><th style="background-color:#10b981;">DOCS TO SEND</th>
-                            <th style="background-color:#3b82f6;">SPEC INSTR</th><th style="background-color:#3b82f6;">CONTACT NAME</th><th style="background-color:#3b82f6;">EMAIL</th><th style="background-color:#3b82f6;">PHONE</th><th style="background-color:#3b82f6;">COMPANY</th><th style="background-color:#3b82f6;">APPROVAL DL</th>
-                            <th style="background-color:#ef4444;">CONT. NUMBER</th><th style="background-color:#ef4444;">SEAL</th><th style="background-color:#ef4444;">TYPE</th><th style="background-color:#ef4444;">TARE</th>
-                            <th style="background-color:#ef4444;">QTY</th><th style="background-color:#ef4444;">PKG TYPE</th><th style="background-color:#ef4444;">GROSS WT</th><th style="background-color:#ef4444;">NET WT</th><th style="background-color:#ef4444;">CBM</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-                    
-            const commonTDs = `
-                <td>${g.bl}</td><td>${g.freight}</td><td>${g.service}</td>
-                <td>${g.receipt}</td><td>${g.pol}</td><td>${g.transship}</td><td>${g.pod}</td><td>${g.delivery}</td>
-                <td>${g.vessel}</td><td>${g.voyage}</td><td>${g.etd}</td><td>${g.eta}</td><td>${g.cutoff}</td>
-                <td>${g.shipper.replace(/\n/g, '<br>')}</td><td>${g.consignee.replace(/\n/g, '<br>')}</td><td>${g.notify.replace(/\n/g, '<br>')}</td>
-                <td>${g.desc}</td><td>${g.marks.replace(/\n/g, '<br>')}</td><td>${g.ncm}</td><td>${g.ruc}</td><td>${g.wood}</td><td style="font-weight:bold; color:${g.imo === 'Sim' ? 'red' : 'black'};">${g.imo}</td><td>${g.comments.replace(/\n/g, '<br>')}</td>
-                <td>${g.inv_num}</td><td>${g.inv_date}</td><td>${g.pack_list}</td><td>${g.due}</td>
-                <td>${g.cert_origin}</td><td>${g.co_num}</td><td>${g.lc}</td><td>${g.lc_bank}</td><td>${g.docs_dest}</td>
-                <td>${g.spec_instr.replace(/\n/g, '<br>')}</td><td>${g.contact_name}</td><td>${g.contact_email}</td><td>${g.contact_phone}</td><td>${g.contact_company}</td><td>${g.approval}</td>
-            `;
-
-            if (currentMode === 'LCL') {
-                const l = getLCLData();
-                tabelaHTML += `<tr style="text-align: center; vertical-align: middle;">${commonTDs}<td style="font-weight:bold; color: #f59e0b;">LCL CARGO</td><td>-</td><td>LCL</td><td>0</td><td>${l.qty}</td><td>${l.pkg}</td><td>${l.gross}</td><td>${l.net || ''}</td><td>${l.cbm || ''}</td></tr>`;
-            } else {
-                listaContainers.forEach(cnt => {
-                    tabelaHTML += `<tr style="text-align: center; vertical-align: middle;">${commonTDs}<td style="font-weight:bold;">${cnt.num}</td><td>${cnt.lacre}</td><td>${cnt.type}</td><td>${cnt.tare}</td><td>${cnt.qty}</td><td>${cnt.pkg}</td><td>${cnt.gross}</td><td>${cnt.net || ''}</td><td>${cnt.cbm || ''}</td></tr>`;
-                });
-            }
-            
-            tabelaHTML += `</tbody></table></body></html>`;
-
-            const blob = new Blob([tabelaHTML], { type: 'application/vnd.ms-excel' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); 
-            a.href = url; 
-            a.download = `BookingDraft_${g.vessel.replace(/[^a-z0-9]/gi, '_')}.xls`;
-            
-            document.body.appendChild(a); 
-            a.click(); 
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 2000);
-
-            if (btn) {
-                btn.setAttribute('data-status', 'pronto');
-                btn.innerHTML = `Abrir E-mail <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`;
-                btn.style.background = '#10b981'; 
-            }
+    // NOVA FUNÇÃO: GERAÇÃO DE PDF NATIVO (STYLIZADO)
+    // =========================================================================
+    function gerarDocumentoPDF() {
+        const g = getGeneralData();
+        const janelaPrint = window.open('', '', 'width=900,height=700');
+        
+        let htmlCarga = '';
+        if (currentMode === 'FCL') {
+            htmlCarga = `<div class="section-title">Declaração de Containers (${listaContainers.length})</div>`;
+            listaContainers.forEach((cnt, i) => {
+                htmlCarga += `
+                <div class="info-box" style="margin-bottom: 10px;">
+                    <strong>#${i+1} | ${cnt.num}</strong> (${cnt.type})<br>
+                    <span style="font-size: 12px; color: #475569;">
+                        Lacre: ${cnt.lacre} | ${cnt.qty}x ${cnt.pkg} | Tara: ${cnt.tare} kg | Gross: ${cnt.gross} kg | CBM: ${cnt.cbm || '-'}
+                    </span>
+                </div>`;
+            });
+        } else {
+            const lcl = getLCLData();
+            htmlCarga = `
+                <div class="section-title">Declaração de Carga LCL</div>
+                <div class="info-box">
+                    <strong>Detalhes LCL</strong><br>
+                    <span style="font-size: 13px; color: #475569;">
+                        Quantidade: ${lcl.qty}x ${lcl.pkg} | Gross Weight: ${lcl.gross} kg | Volume: ${lcl.cbm} m³
+                    </span>
+                </div>`;
         }
+
+        const conteudoPDF = `
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+            <head>
+                <meta charset="UTF-8">
+                <title>Draft OXP - ${g.shipper.split('\n')[0]}</title>
+                <style>
+                    @media print {
+                        @page { margin: 15mm; }
+                        body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                    }
+                    body { font-family: 'Arial', sans-serif; padding: 20px; color: #0f172a; line-height: 1.5; font-size: 12px; }
+                    .header { text-align: center; border-bottom: 2px solid #ef4444; padding-bottom: 15px; margin-bottom: 25px; }
+                    .header img { max-height: 35px; margin-bottom: 10px; }
+                    .header h1 { margin: 0; color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+                    .header p { margin: 5px 0 0 0; color: #64748b; font-size: 12px; }
+                    .section { margin-bottom: 25px; }
+                    .section-title { font-size: 14px; color: #ef4444; font-weight: bold; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 12px; text-transform: uppercase; }
+                    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+                    .info-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; border-left: 4px solid #ef4444; }
+                    .info-label { font-size: 10px; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 3px; }
+                    .info-value { font-size: 13px; font-weight: bold; }
+                    .danger-text { color: #ef4444; font-weight: bold; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; vertical-align: top; }
+                    th { background-color: #f1f5f9; color: #0f172a; font-size: 11px; text-transform: uppercase; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <img src="logo.png" alt="Expeditors Logo" onerror="this.style.display='none'">
+                    <h1>Booking Draft OXP</h1>
+                    <p>Documento Oficial de Conferência Operacional</p>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Routing & Vessel</div>
+                    <div class="grid-2">
+                        <div class="info-box"><span class="info-label">Vessel / Voyage</span><span class="info-value">${g.vessel} / ${g.voyage}</span></div>
+                        <div class="info-box"><span class="info-label">POL ➔ POD</span><span class="info-value">${g.pol} ➔ ${g.pod}</span></div>
+                        <div class="info-box"><span class="info-label">BL Issuance / Freight</span><span class="info-value">${g.bl} | ${g.freight}</span></div>
+                        <div class="info-box"><span class="info-label">ETD / ETA</span><span class="info-value">${g.etd || 'A Confirmar'} / ${g.eta || 'A Confirmar'}</span></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Parties & Contacts</div>
+                    <table>
+                        <tr><th style="width: 50%;">Shipper</th><th>Consignee</th></tr>
+                        <tr>
+                            <td>${g.shipper.replace(/\n/g, '<br>')}</td>
+                            <td>${g.consignee.replace(/\n/g, '<br>')}</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; background: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <span class="info-label">Notify:</span>
+                        <span style="font-size: 12px;">${g.notify.replace(/\n/g, '<br>')}</span>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Descrição & Compliance</div>
+                    <div class="grid-2">
+                        <div class="info-box"><span class="info-label">Invoice / NCM</span><span class="info-value">${g.inv_num} | ${g.ncm}</span></div>
+                        <div class="info-box"><span class="info-label">Dangerous Goods (IMO)</span><span class="info-value ${g.imo === 'Sim' ? 'danger-text' : ''}">${g.imo} ${g.imo === 'Sim' ? `(Classe: ${document.getElementById('dg_class').value} | UN: ${document.getElementById('dg_un').value})` : ''}</span></div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <strong>Description of Goods:</strong><br>
+                        <span style="font-size: 12px; color: #475569;">${g.desc.replace(/\n/g, '<br>')}</span>
+                    </div>
+                </div>
+
+                <div class="section">
+                    ${htmlCarga}
+                </div>
+
+                <div style="text-align: center; margin-top: 40px; border-top: 1px solid #cbd5e1; padding-top: 10px; color: #94a3b8; font-size: 10px;">
+                    Gerado automaticamente via Sistema Draft OXP Expeditors.<br>
+                    Preparado por: ${g.contact_name} (${g.contact_email})
+                </div>
+            </body>
+        </html>`;
+
+        janelaPrint.document.write(conteudoPDF);
+        janelaPrint.document.close();
+        janelaPrint.focus();
+        
+        // Timeout para garantir a renderização do CSS antes de abrir a tela de print
+        setTimeout(() => {
+            janelaPrint.print();
+            janelaPrint.close();
+        }, 500);
+    }
+
+    // =========================================================================
+    // SUBSTITUA A FUNÇÃO gerarEEnviarExcel() POR ESTA AQUI
+    // =========================================================================
+    function gerarEEnviarExcel() {
+        const btn = document.querySelector('button[onclick="gerarEEnviarExcel()"]');
+        
+        // Fase 2: O botão já foi clicado antes e está aguardando abrir o email
+        if (btn && btn.getAttribute('data-status') === 'pronto') {
+            const g = getGeneralData();
+            const emailTo = "operacao.oxp@expeditors.com";
+            const subject = encodeURIComponent(`Draft OXP - ${g.shipper.split('\n')[0]}`);
+            const body = encodeURIComponent(`Olá Equipe OXP,\n\nSegue o Draft do pedido!\n\nNavio: ${g.vessel}\nPOL: ${g.pol} / POD: ${g.pod}\n\n(Lembrete: Anexar a planilha XLS e o PDF gerados pelo sistema)\n\nAtenciosamente,\n${g.contact_name}`);
+            window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+            
+            btn.removeAttribute('data-status'); 
+            btn.innerHTML = `Enviar Ordem <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m2 21l21-9L2 3v7l15 2l-15 2z"/></svg>`; 
+            btn.style.background = ''; 
+            fecharModal(); 
+            return;
+        }
+
+        // Fase 1: Geração dos documentos (Primeiro o PDF, depois o Excel)
+        gerarDocumentoPDF();
+
+        const g = getGeneralData();
+        let tabelaHTML = `
+            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head><meta charset="utf-8"></head>
+            <body>
+            <table border="1" style="font-family: Arial; font-size: 11px; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #0f172a; color: #ffffff; font-weight: bold; text-align: center;">
+                        <th>BL ISSUANCE</th><th>FREIGHT TERMS</th><th>SERVICE</th>
+                        <th>RECEIPT</th><th>POL</th><th>TRANSSHIPMENT</th><th>POD</th><th>DELIVERY</th>
+                        <th>VESSEL</th><th>VOYAGE</th><th>ETD</th><th>ETA</th><th>CUTOFF</th>
+                        <th>SHIPPER</th><th>CONSIGNEE</th><th>NOTIFY</th>
+                        <th>DESCRIPTION</th><th>MARKS</th><th>NCM</th><th>RUC</th><th>WOOD DECL.</th><th style="background-color:#f59e0b;">IMO</th><th>COMMENTS</th>
+                        <th style="background-color:#10b981;">INVOICE NO</th><th style="background-color:#10b981;">INV DATE</th><th style="background-color:#10b981;">PACKING LIST</th><th style="background-color:#10b981;">RE/DU-E</th>
+                        <th style="background-color:#10b981;">CERT ORIGIN</th><th style="background-color:#10b981;">CO NUMBER</th><th style="background-color:#10b981;">LC</th><th style="background-color:#10b981;">ISSUING BANK</th><th style="background-color:#10b981;">DOCS TO SEND</th>
+                        <th style="background-color:#3b82f6;">SPEC INSTR</th><th style="background-color:#3b82f6;">CONTACT NAME</th><th style="background-color:#3b82f6;">EMAIL</th><th style="background-color:#3b82f6;">PHONE</th><th style="background-color:#3b82f6;">COMPANY</th><th style="background-color:#3b82f6;">APPROVAL DL</th>
+                        <th style="background-color:#ef4444;">CONT. NUMBER</th><th style="background-color:#ef4444;">SEAL</th><th style="background-color:#ef4444;">TYPE</th><th style="background-color:#ef4444;">TARE</th>
+                        <th style="background-color:#ef4444;">QTY</th><th style="background-color:#ef4444;">PKG TYPE</th><th style="background-color:#ef4444;">GROSS WT</th><th style="background-color:#ef4444;">NET WT</th><th style="background-color:#ef4444;">CBM</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+                
+        const commonTDs = `
+            <td>${g.bl}</td><td>${g.freight}</td><td>${g.service}</td>
+            <td>${g.receipt}</td><td>${g.pol}</td><td>${g.transship}</td><td>${g.pod}</td><td>${g.delivery}</td>
+            <td>${g.vessel}</td><td>${g.voyage}</td><td>${g.etd}</td><td>${g.eta}</td><td>${g.cutoff}</td>
+            <td>${g.shipper.replace(/\n/g, '<br>')}</td><td>${g.consignee.replace(/\n/g, '<br>')}</td><td>${g.notify.replace(/\n/g, '<br>')}</td>
+            <td>${g.desc}</td><td>${g.marks.replace(/\n/g, '<br>')}</td><td>${g.ncm}</td><td>${g.ruc}</td><td>${g.wood}</td><td style="font-weight:bold; color:${g.imo === 'Sim' ? 'red' : 'black'};">${g.imo}</td><td>${g.comments.replace(/\n/g, '<br>')}</td>
+            <td>${g.inv_num}</td><td>${g.inv_date}</td><td>${g.pack_list}</td><td>${g.due}</td>
+            <td>${g.cert_origin}</td><td>${g.co_num}</td><td>${g.lc}</td><td>${g.lc_bank}</td><td>${g.docs_dest}</td>
+            <td>${g.spec_instr.replace(/\n/g, '<br>')}</td><td>${g.contact_name}</td><td>${g.contact_email}</td><td>${g.contact_phone}</td><td>${g.contact_company}</td><td>${g.approval}</td>
+        `;
+
+        if (currentMode === 'LCL') {
+            const l = getLCLData();
+            tabelaHTML += `<tr style="text-align: center; vertical-align: middle;">${commonTDs}<td style="font-weight:bold; color: #f59e0b;">LCL CARGO</td><td>-</td><td>LCL</td><td>0</td><td>${l.qty}</td><td>${l.pkg}</td><td>${l.gross}</td><td>${l.net || ''}</td><td>${l.cbm || ''}</td></tr>`;
+        } else {
+            listaContainers.forEach(cnt => {
+                tabelaHTML += `<tr style="text-align: center; vertical-align: middle;">${commonTDs}<td style="font-weight:bold;">${cnt.num}</td><td>${cnt.lacre}</td><td>${cnt.type}</td><td>${cnt.tare}</td><td>${cnt.qty}</td><td>${cnt.pkg}</td><td>${cnt.gross}</td><td>${cnt.net || ''}</td><td>${cnt.cbm || ''}</td></tr>`;
+            });
+        }
+        
+        tabelaHTML += `</tbody></table></body></html>`;
+
+        const blob = new Blob([tabelaHTML], { type: 'application/vnd.ms-excel' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); 
+        a.href = url; 
+        a.download = `BookingDraft_${g.vessel.replace(/[^a-z0-9]/gi, '_')}.xls`;
+        
+        document.body.appendChild(a); 
+        a.click(); 
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+        if (btn) {
+            btn.setAttribute('data-status', 'pronto');
+            btn.innerHTML = `Abrir E-mail <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`;
+            btn.style.background = '#10b981'; 
+        }
+    }
 
         // =========================================================================
         // IMPORTAR/EXPORTAR & LOCAL STORAGE
@@ -1993,6 +2197,29 @@
         window.addEventListener('DOMContentLoaded', carregarLocalStorage);
         document.getElementById('draftForm').addEventListener('input', salvarLocalStorage);
         document.getElementById('draftForm').addEventListener('change', salvarLocalStorage);
+
+        // =========================================================================
+        // TRADUÇÃO DA ABA DE AJUDA
+        // =========================================================================
+        let isTranslated = false;
+        function toggleTranslation() {
+            isTranslated = !isTranslated;
+            const btnTranslate = document.getElementById('btn-translate');
+            const title = document.getElementById('help-title');
+            const iconeGlobo = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`;
+            
+            if (isTranslated) {
+                document.getElementById('help-en').style.display = 'none';
+                document.getElementById('help-pt').style.display = 'block';
+                title.textContent = "Guia de Uso do Portal";
+                btnTranslate.innerHTML = `${iconeGlobo} Ver Original (EN)`;
+            } else {
+                document.getElementById('help-pt').style.display = 'none';
+                document.getElementById('help-en').style.display = 'block';
+                title.textContent = "Portal Usage Guide";
+                btnTranslate.innerHTML = `${iconeGlobo} Traduzir PT-BR`;
+            }
+        }
 
         // =========================================================================
         // RESTORE STATE & UNDO/REDO (MÁQUINA DO TEMPO)
